@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+
+    <class name="flox.model.WorkflowModel" table="flox_workflow">
+        <cache usage="read-write"/>
+        <id name="id" type="long">
+            <generator class="native">
+                <param name="sequence">flox_workflow_sequence</param>
+            </generator>
+        </id>
+
+        <property name="processName" type="string"/>
+
+        <any id-type="long" name="flowedObject">
+            <column name="flowedObjectClass"/>
+            <column name="flowedObjectId"/>
+        </any>
+
+    </class>
+
+</hibernate-mapping>

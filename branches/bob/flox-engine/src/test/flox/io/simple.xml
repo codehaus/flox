@@ -1,0 +1,16 @@
+<process name="my first process" xmlns="http://flox.codehaus.org/v1/">
+    <state name="first">
+        <transition name="go to second" to="second"/>
+        <transition name="go to third"  to="third"/>
+    </state>
+
+    <state name="second">
+        <transition name="go to first" to="first"/>
+        <transition name="go to third" to="third"/>
+    </state>
+
+    <state name="third">
+        <transition name="go to first"  to="first"/>
+        <transition name="go to second" to="second"/>
+    </state>
+</process>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+        "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+    <bean id="test.workflowEngineTarget"
+        class="flox.DefaultWorkflowEngine">
+        <property name="workflowModelDao">
+            <ref bean="workflowModelDao"/>
+        </property>
+        <property name="stateModelDao">
+            <ref bean="stateModelDao"/>
+        </property>
+    </bean>
+
+    <bean id="test.workflowEngine" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager">
+            <ref bean="transactionManager"/>
+        </property>
+        <property name="target">
+            <ref bean="workflowEngineTarget"/>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="newWorkflow*">PROPAGATION_REQUIRED</prop>
+                <prop key="getWorkflow*">PROPAGATION_REQUIRED</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="test.processReader" class="flox.io.ProcessReader">
+        <property name="actionHandlerFactories">
+            <list>
+                <bean class="flox.spi.SimpleActionHandlerFactory">
+                    <property name="uri">
+                        <value>http://flox.codehaus.org/v1/test/</value>
+                    </property>
+                </bean>
+            </list>
+        </property>
+        <property name="triggerDefinitionHandlerFactories">
+            <list>
+                <bean class="flox.spi.SimpleTriggerDefinitionHandlerFactory">
+                    <property name="uri">
+                        <value>http://flox.codehaus.org/v1/test/</value>
+                    </property>
+                    <property name="handlers">
+                        <map>
+                            <entry key="manual">
+                                <bean class="flox.spi.SimpleTriggerDefinitionHandler">
+                                    <property name="triggerDefinition">
+                                        <bean class="flox.def.ManualTriggerDefinition"/>
+                                    </property>
+                                </bean>
+                            </entry>
+                        </map>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+</beans>
+
