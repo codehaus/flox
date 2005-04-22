@@ -1,0 +1,16 @@
+<process name="fully-auto"
+    xmlns="http://flox.codehaus.org/v1/"
+    xmlns:test="http://flox.codehaus.org/v1/test/">
+
+    <state name="first">
+        <transition name="go to second" to="second"/>
+    </state>
+
+    <state name="second">
+        <transition name="go to third" to="third"/>
+    </state>
+
+    <state name="third">
+    </state>
+
+</process>
