@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+
+    <class name="flox.model.StateModel" table="flox_state">
+        <cache usage="read-write"/>
+        <id name="id" type="long">
+            <generator class="native">
+                <param name="sequence">flox_state_sequence</param>
+            </generator>
+        </id>
+
+        <many-to-one name="workflow"    class="flox.model.WorkflowModel"/>
+        <property    name="name"        type="string"/>
+        <property    name="enteredDate" type="timestamp"/>
+        <property    name="exitedDate"  type="timestamp"/>
+
+    </class>
+
+</hibernate-mapping>
