@@ -3,6 +3,6 @@ velocity.log
 test-output
 .classpath
 .project
-.iml
-.ipr
-.iws
+flox-engine.iml
+flox-engine.ipr
+flox-engine.iws
