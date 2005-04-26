@@ -2,12 +2,12 @@ package flox.model;
 
 import org.springframework.orm.hibernate.support.HibernateDaoSupport;
 import org.springframework.orm.hibernate.SessionFactoryUtils;
-import net.sf.hibernate.Criteria;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.expression.Expression;
-import net.sf.hibernate.expression.Criterion;
-import net.sf.hibernate.expression.Order;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.HibernateException;
+import org.hibernate.criterion.Expression;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Order;
 
 import java.util.List;
 

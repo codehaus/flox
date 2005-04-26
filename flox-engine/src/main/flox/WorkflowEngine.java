@@ -7,7 +7,7 @@ import flox.model.StateModel;
 import java.util.Collection;
 import java.util.List;
 
-import net.sf.hibernate.expression.Criterion;
+import org.hibernate.criterion.Criterion;
 
 /**
  * Created by IntelliJ IDEA.

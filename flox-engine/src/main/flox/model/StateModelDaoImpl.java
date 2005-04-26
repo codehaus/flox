@@ -1,12 +1,9 @@
 package flox.model;
 
-import net.sf.hibernate.Criteria;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.expression.Expression;
-import net.sf.hibernate.expression.Criterion;
-import net.sf.hibernate.expression.Order;
-
 import java.util.List;
+
+import org.hibernate.criterion.Expression;
+import org.hibernate.criterion.Order;
 
 /**
  * Created by IntelliJ IDEA.

@@ -9,8 +9,7 @@ import flox.spi.Predicate;
 
 import java.util.*;
 
-import net.sf.hibernate.Criteria;
-import net.sf.hibernate.expression.Criterion;
+import org.hibernate.criterion.Criterion;
 import org.springframework.beans.factory.InitializingBean;
 
 /**

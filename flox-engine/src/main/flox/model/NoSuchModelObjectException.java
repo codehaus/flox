@@ -1,6 +1,6 @@
 package flox.model;
 
-import net.sf.hibernate.Criteria;
+import org.hibernate.Criteria;
 
 /**
  * Created by IntelliJ IDEA.
