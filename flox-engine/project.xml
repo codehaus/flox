@@ -51,6 +51,78 @@
             </properties>
         </dependency>
         <dependency>
+            <groupId>commons-dbcp</groupId>
+            <artifactId>commons-dbcp</artifactId>
+            <version>1.2.1</version>
+            <properties>
+                <war.bundle>true</war.bundle>
+            </properties>
+        </dependency>
+        <dependency>
+            <groupId>commons-pool</groupId>
+            <artifactId>commons-pool</artifactId>
+            <version>1.2</version>
+            <properties>
+                <war.bundle>true</war.bundle>
+            </properties>
+        </dependency>
+        <dependency>
+            <groupId>jta</groupId>
+            <artifactId>jta</artifactId>
+            <version>1.0.1b</version>
+            <properties>
+                <war.bundle>true</war.bundle>
+            </properties>
+        </dependency>
+        <dependency>
+            <groupId>dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+            <version>1.5.2</version>
+            <properties>
+                <war.bundle>true</war.bundle>
+            </properties>
+        </dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.1</version>
+            <properties>
+                <war.bundle>true</war.bundle>
+            </properties>
+        </dependency>
+        <dependency>
+            <groupId>ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <version>0.9</version>
+            <properties>
+                <war.bundle>true</war.bundle>
+            </properties>
+        </dependency>
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>2.0.2</version>
+            <properties>
+                <war.bundle>true</war.bundle>
+            </properties>
+        </dependency>
+        <dependency>
+            <groupId>asm</groupId>
+            <artifactId>asm</artifactId>
+            <version>1.4.3</version>
+            <properties>
+                <war.bundle>true</war.bundle>
+            </properties>
+        </dependency>
+        <dependency>
+            <groupId>asm</groupId>
+            <artifactId>asm-util</artifactId>
+            <version>1.4.3</version>
+            <properties>
+                <war.bundle>true</war.bundle>
+            </properties>
+        </dependency>
+        <dependency>
             <groupId>hibernate</groupId>
             <artifactId>hibernate</artifactId>
             <version>3.0</version>
@@ -74,40 +146,60 @@
                 <war.bundle>true</war.bundle>
             </properties>
         </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.0.4</version>
+            <properties>
+                <war.bundle>true</war.bundle>
+            </properties>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.8</version>
+            <properties>
+                <war.bundle>true</war.bundle>
+            </properties>
+        </dependency>
     </dependencies>
 
   <build>
 
-    <sourceDirectory>src/main/java</sourceDirectory>
+    <sourceDirectory>src/main/</sourceDirectory>
 
-    <unitTestSourceDirectory>src/test/java</unitTestSourceDirectory>
+    <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
 
     <!-- Unit test cases -->
     <unitTest>
-      <resources><resource>
-			<directory>src/test/java</directory>
-			<includes><include>**/*</include></includes>
-			<excludes><exclude>**/*.java</exclude></excludes>
-	  </resource></resources>
-	  <includes>
+      <resources>
+        <resource>
+          <directory>src/test</directory>
+          <includes>
+            <include>**/*</include>
+          </includes>
+          <excludes>
+            <exclude>**/*.java</exclude>
+          </excludes>
+        </resource>
+      </resources>
+      <includes>
         <include>**/*Test.java</include>
       </includes>
-      <excludes>
-        <exclude>**/RepositoryTest.java</exclude>
-      </excludes>
     </unitTest>
               
     <resources>
-		<resource>    	
-				<directory>src/main/java</directory>
-				<includes><include>**/*</include></includes>
-				<excludes><exclude>**/*.java</exclude></excludes>
-		</resource>
-	</resources>
-
+      <resource>    	
+        <directory>src/main/</directory>
+          <includes>
+            <include>**/*</include>
+          </includes>
+          <excludes>
+            <exclude>**/*.java</exclude>
+          </excludes>
+        </resource>
+      </resources>
   </build>
-  
-  
   
 </project>
 
