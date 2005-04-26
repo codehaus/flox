@@ -1,10 +1,10 @@
 package flox.model;
 
-import net.sf.hibernate.Criteria;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.util.PropertiesHelper;
-import net.sf.hibernate.expression.Expression;
-import net.sf.hibernate.expression.Criterion;
+import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Expression;
+import org.hibernate.util.PropertiesHelper;
 
 import java.util.List;
 import java.io.Serializable;

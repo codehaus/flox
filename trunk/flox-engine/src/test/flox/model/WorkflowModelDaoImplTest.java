@@ -7,10 +7,10 @@ import flox.FloxTestCase;
 
 import java.util.Date;
 
-import net.sf.hibernate.Criteria;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.expression.Criterion;
-import net.sf.hibernate.expression.Expression;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Expression;
 
 public class WorkflowModelDaoImplTest 
         extends DaoTestCase

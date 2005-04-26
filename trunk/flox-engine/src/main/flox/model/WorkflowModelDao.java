@@ -1,7 +1,7 @@
 package flox.model;
 
-import net.sf.hibernate.Criteria;
-import net.sf.hibernate.expression.Criterion;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Criterion;
 
 import java.util.List;
 
