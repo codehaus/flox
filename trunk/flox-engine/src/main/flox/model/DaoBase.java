@@ -1,7 +1,7 @@
 package flox.model;
 
-import org.springframework.orm.hibernate.support.HibernateDaoSupport;
-import org.springframework.orm.hibernate.SessionFactoryUtils;
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.orm.hibernate3.SessionFactoryUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.HibernateException;
