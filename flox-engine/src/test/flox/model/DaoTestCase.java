@@ -41,9 +41,5 @@ public abstract class DaoTestCase
         super.tearDown();
     }
 
-    public static Test suite()
-    {
-        return new TestSuite(DaoTestCase.class);
-    }
 }
 
