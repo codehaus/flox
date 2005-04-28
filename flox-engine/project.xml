@@ -125,7 +125,7 @@
         <dependency>
             <groupId>hibernate</groupId>
             <artifactId>hibernate</artifactId>
-            <version>3.0</version>
+            <version>3.0.1</version>
             <properties>
                 <war.bundle>true</war.bundle>
             </properties>
