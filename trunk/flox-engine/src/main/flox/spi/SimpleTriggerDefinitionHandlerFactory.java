@@ -80,4 +80,10 @@ public class SimpleTriggerDefinitionHandlerFactory
 
         return null;
     }
+    
+    public String toString()
+    {
+        return "[SimpleTriggerDefiniitionHandlerFactory: uri=" + this.uri +
+            "; handlers=" + this.handlers + "]";
+    }
 }

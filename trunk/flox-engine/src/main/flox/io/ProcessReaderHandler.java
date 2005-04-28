@@ -228,7 +228,7 @@ public class ProcessReaderHandler
             else
             {
                 TriggerDefinitionHandlerFactory triggerHandlerFactory = getTriggerDefinitionHandlerFactory( uri, localName );
-
+                
                 if ( triggerHandlerFactory != null )
                 {
                     if ( this.currentTransition.getTriggerDefinition() != null )

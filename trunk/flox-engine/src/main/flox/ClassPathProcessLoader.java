@@ -21,8 +21,25 @@ import org.xml.sax.SAXException;
 public class ClassPathProcessLoader
         implements ProcessLoader
 {
+    private ProcessReader processReader;
     private String prefix;
     private List processNames;
+    
+    public void setProcessReader(ProcessReader processReader)
+    {
+        this.processReader = processReader;
+    }
+
+    public ProcessReader getProcessReader()
+    {
+        if ( processReader == null )
+        {
+            System.err.println( "CREATING NEW PROCESSREADER" );
+            processReader = new ProcessReader();
+        }
+        
+        return processReader;
+    }
 
     public String getPrefix()
     {
@@ -86,8 +103,8 @@ public class ClassPathProcessLoader
 
         if ( url != null )
         {
-            ProcessReader reader = new ProcessReader();
-
+            ProcessReader reader = getProcessReader();
+            
             Process process = reader.read( url );
 
             workflowEngine.addProcess( process );
