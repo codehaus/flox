@@ -109,12 +109,18 @@ public class DefaultWorkflowEngine
     public Workflow newWorkflow(String processName)
         throws NoSuchProcessException
     {
+        return newWorkflow( processName, null );
+    }
+    
+    public Workflow newWorkflow(String processName, Object flowedObject)
+        throws NoSuchProcessException
+    {
         Process process = getProcess( processName );
 
-        WorkflowModel workflowModel = new WorkflowModel();
-
+        WorkflowModel workflowModel = new WorkflowModel( flowedObject );
+        
         getWorkflowModelDao().save( workflowModel );
-
+    
         Workflow workflow = new Workflow( this,
                                           process,
                                           workflowModel );
@@ -178,7 +184,7 @@ public class DefaultWorkflowEngine
         stateModel.setWorkflow( workflow.getModel() );
 
         getStateModelDao().save( stateModel );
-
+        
         Action action = state.getAction();
 
         if ( action != null )
@@ -385,7 +391,7 @@ public class DefaultWorkflowEngine
     public void afterPropertiesSet() throws Exception
     {
         if ( this.processLoader != null )
-        {
+        {   
             this.processLoader.loadProcesses( this );
         }
     }

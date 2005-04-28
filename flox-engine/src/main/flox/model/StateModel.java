@@ -65,9 +65,18 @@ public class StateModel
     {
         return exitedDate;
     }
-
+    
     public void setExitedDate(Date exitedDate)
     {
         this.exitedDate = exitedDate;
     }
+
+    public String toString()
+    {
+        return "[State: id=" + this.id + 
+            "; name=" + this.name +
+            "; enteredDate=" + this.enteredDate +
+            "; exitedDate=" + this.exitedDate + "]";
+    }
+
 }

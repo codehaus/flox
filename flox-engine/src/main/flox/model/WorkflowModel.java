@@ -16,6 +16,11 @@ public class WorkflowModel
     public WorkflowModel()
     {
     }
+    
+    public WorkflowModel(Object flowedObject)
+    {
+        setFlowedObject( flowedObject );
+    }
 
     public Long getId()
     {
@@ -45,5 +50,12 @@ public class WorkflowModel
     public void setFlowedObject(Object flowedObject)
     {
         this.flowedObject = flowedObject;
+    }
+    
+    public String toString()
+    {
+        return "[WorkflowModel: id=" + this.id +
+            "; processName=" + this.processName +
+            "; flowedObject=" + this.flowedObject + "]";
     }
 }
