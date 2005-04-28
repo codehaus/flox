@@ -83,7 +83,7 @@ public class SimpleTriggerDefinitionHandlerFactory
     
     public String toString()
     {
-        return "[SimpleTriggerDefiniitionHandlerFactory: uri=" + this.uri +
+        return "[SimpleTriggerDefinitionHandlerFactory: uri=" + this.uri +
             "; handlers=" + this.handlers + "]";
     }
 }
