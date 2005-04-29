@@ -1,6 +1,8 @@
 package flox;
 
-import flox.def.*;
+import flox.def.NoSuchStateException;
+import flox.def.Process;
+import flox.def.Transition;
 import flox.model.NoSuchModelObjectException;
 import flox.model.StateModel;
 
@@ -23,6 +25,8 @@ public interface WorkflowEngine
 
     Collection getProcessNames();
 
+    Process getProcess(String name) throws NoSuchProcessException;
+    
     Workflow getWorkflow(String processName,
                          Class flowedObjectClass,
                          Criterion flowedObjectCriterion)
@@ -30,6 +34,8 @@ public interface WorkflowEngine
 
     List getWorkflows(String processName) throws NoSuchProcessException;
 
+    List getWorkflows(String processName, String currentState) throws NoSuchProcessException, NoSuchStateException;
+    
     List<Transition> getAvailableCurrentTransitions(Workflow workflow);
 
     List<StateModel> getStateSequence(Workflow workflow);
