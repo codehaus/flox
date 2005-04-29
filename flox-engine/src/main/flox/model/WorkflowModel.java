@@ -12,6 +12,7 @@ public class WorkflowModel
     private Long id;
     private String processName;
     private Object flowedObject;
+    private StateModel currentState;
 
     public WorkflowModel()
     {
@@ -50,6 +51,16 @@ public class WorkflowModel
     public void setFlowedObject(Object flowedObject)
     {
         this.flowedObject = flowedObject;
+    }
+    
+    public StateModel getCurrentState()
+    {
+        return this.currentState;
+    }
+    
+    public void setCurrentState(StateModel currentState)
+    {
+        this.currentState = currentState;
     }
     
     public String toString()

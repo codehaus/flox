@@ -4,7 +4,10 @@ import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Expression;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.util.PropertiesHelper;
+
+import flox.def.State;
 
 import java.util.List;
 import java.io.Serializable;
@@ -66,6 +69,26 @@ public class WorkflowModelDaoImpl
         catch (HibernateException e)
         {
             e.printStackTrace();
+            throw convertHibernateAccessException( e );
+        }
+    }
+    
+
+    public List getAll(String processName, State currentState)
+    {
+        Criteria criteria = createCriteria( WorkflowModel.class );
+
+        criteria.add( Expression.eq( "processName", processName ) );
+        
+        criteria.createCriteria( "currentState" )
+            .add( Expression.eq( "name", currentState.getName() ) );
+        
+        try
+        {
+            return criteria.list();
+        }
+        catch (HibernateException e)
+        {
             throw convertHibernateAccessException( e );
         }
     }

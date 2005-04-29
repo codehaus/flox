@@ -2,6 +2,7 @@ package flox.def;
 
 import flox.Workflow;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,13 +16,13 @@ import java.util.Map;
 public class Process
 {
     private String name;
-    private Map states;
+    private Map<String,State> states;
     private State startState;
 
     public Process(String name)
     {
         this.name = name;
-        this.states = new HashMap();
+        this.states = new HashMap<String,State>();
     }
 
     public String getName()
@@ -76,5 +77,10 @@ public class Process
         }
 
         return state;
+    }
+    
+    public Collection<State> getStates()
+    {
+        return this.states.values();
     }
 }

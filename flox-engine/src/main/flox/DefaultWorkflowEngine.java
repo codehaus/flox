@@ -87,7 +87,7 @@ public class DefaultWorkflowEngine
                             process );
     }
 
-    Process getProcess(String name)
+    public Process getProcess(String name)
         throws NoSuchProcessException
     {
         Process process = (Process) this.processes.get( name );
@@ -119,6 +119,7 @@ public class DefaultWorkflowEngine
 
         WorkflowModel workflowModel = new WorkflowModel( flowedObject );
         
+        workflowModel.setProcessName( processName );
         getWorkflowModelDao().save( workflowModel );
     
         Workflow workflow = new Workflow( this,
@@ -185,6 +186,9 @@ public class DefaultWorkflowEngine
 
         getStateModelDao().save( stateModel );
         
+        workflow.getModel().setCurrentState( stateModel );
+        
+        getWorkflowModelDao().save( workflow.getModel() );
         Action action = state.getAction();
 
         if ( action != null )
@@ -335,6 +339,28 @@ public class DefaultWorkflowEngine
         Process process = getProcess( processName );
 
         return getWorkflowModelDao().getAll( processName );
+    }
+    
+    public List getWorkflows(String processName, String currentStateName) throws NoSuchProcessException, NoSuchStateException
+    {
+        Process process = getProcess( processName );
+        
+        State currentState = process.getState( currentStateName );
+        
+        List models = getWorkflowModelDao().getAll( processName, currentState );
+        
+        List flows = new ArrayList( models.size() );
+        
+        for ( Iterator modelIter = models.iterator(); modelIter.hasNext(); )
+        {
+            WorkflowModel model = (WorkflowModel) modelIter.next();
+            
+            Workflow flow = new Workflow( this, process, model );
+            
+            flows.add( flow );
+        }
+        
+        return flows;
     }
 
     State getCurrentState(Workflow workflow)

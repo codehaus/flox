@@ -3,6 +3,8 @@ package flox.model;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Criterion;
 
+import flox.def.State;
+
 import java.util.List;
 
 /**
@@ -24,5 +26,7 @@ public interface WorkflowModelDao
                       Criterion flowedObjectCriterion)
             throws NoSuchModelObjectException;
 
+    List getAll(String processName, State currentState);
+    
     List getAll(String processName);
 }
