@@ -5,6 +5,7 @@ import flox.def.Process;
 import flox.def.State;
 import flox.def.Transition;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -14,9 +15,9 @@ import java.util.List;
  * Time: 11:32:28 PM
  * To change this template use File | Settings | File Templates.
  */
-public class Workflow
+public class Workflow implements Serializable
 {
-    private DefaultWorkflowEngine engine;
+    private transient DefaultWorkflowEngine engine;
     private Process process;
     private WorkflowModel model;
 

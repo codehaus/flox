@@ -1,5 +1,7 @@
 package flox.model;
 
+import java.io.Serializable;
+
 /**
  * Created by IntelliJ IDEA.
  * User: bob
@@ -7,7 +9,7 @@ package flox.model;
  * Time: 12:24:20 AM
  * To change this template use File | Settings | File Templates.
  */
-public class WorkflowModel
+public class WorkflowModel implements Serializable
 {
     private Long id;
     private String processName;

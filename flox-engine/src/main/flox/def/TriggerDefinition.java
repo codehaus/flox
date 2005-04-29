@@ -1,5 +1,7 @@
 package flox.def;
 
+import java.io.Serializable;
+
 /**
  * Created by IntelliJ IDEA.
  * User: bob
@@ -7,7 +9,7 @@ package flox.def;
  * Time: 12:16:57 PM
  * To change this template use File | Settings | File Templates.
  */
-public class TriggerDefinition
+public class TriggerDefinition implements Serializable
 {
     
 }

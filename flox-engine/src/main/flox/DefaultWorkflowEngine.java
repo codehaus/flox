@@ -399,10 +399,13 @@ public class DefaultWorkflowEngine
         {
             Transition transition = transIter.next();
 
-            if ( ! transition.getPredicate().evaluate( workflow,
-                                                       null ) )
+            if ( transition.getPredicate() != null ) 
             {
-                transIter.remove();
+                if ( ! transition.getPredicate().evaluate( workflow,
+                                                           null ) )
+                {
+                    transIter.remove();
+                }
             }
         }
 

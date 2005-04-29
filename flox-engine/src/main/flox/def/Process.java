@@ -2,6 +2,7 @@ package flox.def;
 
 import flox.Workflow;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +14,7 @@ import java.util.Map;
  * Time: 10:52:33 PM
  * To change this template use File | Settings | File Templates.
  */
-public class Process
+public class Process implements Serializable
 {
     private String name;
     private Map<String,State> states;
