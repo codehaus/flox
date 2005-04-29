@@ -1,5 +1,6 @@
 package flox.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -9,7 +10,7 @@ import java.util.Date;
  * Time: 10:00:17 AM
  * To change this template use File | Settings | File Templates.
  */
-public class StateModel
+public class StateModel implements Serializable
 {
     private Long id;
     private WorkflowModel workflow;

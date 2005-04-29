@@ -2,6 +2,7 @@ package flox.def;
 
 import flox.spi.Action;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -11,7 +12,7 @@ import java.util.*;
  * Time: 10:52:44 PM
  * To change this template use File | Settings | File Templates.
  */
-public class State
+public class State implements Serializable
 {
     private Process process;
     private String name;

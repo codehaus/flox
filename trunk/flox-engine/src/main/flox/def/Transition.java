@@ -1,5 +1,7 @@
 package flox.def;
 
+import java.io.Serializable;
+
 import flox.spi.Predicate;
 import flox.spi.Action;
 
@@ -10,7 +12,7 @@ import flox.spi.Action;
  * Time: 10:52:51 PM
  * To change this template use File | Settings | File Templates.
  */
-public class Transition
+public class Transition implements Serializable
 {
     private String name;
     private State origin;
