@@ -41,8 +41,11 @@ public interface WorkflowEngine
     List<StateModel> getStateSequence(Workflow workflow);
 
     boolean attemptManualTransition(Workflow workflow,
-                                           Transition transition) throws TransitionNotManualException;
+                                    Transition transition) throws TransitionNotManualException;
 
+    boolean attemptManualTransition(Long workflowId,
+                                    String transitionName) throws NoSuchModelObjectException, NoSuchProcessException, TransitionNotManualException;
+    
     Workflow newWorkflow(String processName)
         throws NoSuchProcessException;
 }
