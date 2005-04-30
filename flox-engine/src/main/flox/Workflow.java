@@ -44,6 +44,11 @@ public class Workflow implements Serializable
     {
         return model;
     }
+    
+    public Long getId()
+    {
+        return getModel().getId();
+    }
 
     public State getCurrentState()
     {
