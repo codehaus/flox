@@ -136,6 +136,20 @@ public class DefaultWorkflowEngine
         return workflow;
     }
     
+    public boolean attemptManualTransition(Long workflowId,
+                                           String transitionName) throws NoSuchModelObjectException, NoSuchProcessException, TransitionNotManualException
+    {
+        Workflow workflow = getWorkflow( workflowId );
+        
+        Process process = workflow.getProcess();
+        
+        State state = workflow.getCurrentState();
+        
+        Transition transition = state.getTransition( transitionName );
+        
+        return attemptManualTransition( workflow,
+                                        transition );
+    }
     public boolean attemptManualTransition(Workflow workflow,
                                            Transition transition) throws TransitionNotManualException
     {
@@ -333,6 +347,15 @@ public class DefaultWorkflowEngine
 
         return workflow;
     }
+    
+    public Workflow getWorkflow(Long id) throws NoSuchModelObjectException, NoSuchProcessException
+    {
+        WorkflowModel wfModel = getWorkflowModelDao().get( id );
+        
+        Process process = getProcess( wfModel.getProcessName() );
+        
+        return new Workflow( this, process, wfModel );
+    }
 
     public List getWorkflows(String processName) throws NoSuchProcessException
     {
@@ -388,7 +411,12 @@ public class DefaultWorkflowEngine
     {
         State state = getCurrentState( workflow );
 
-        return state.getTransitions();
+        if ( state != null )
+        {
+            return state.getTransitions();
+        }
+        
+        return new ArrayList<Transition>();
     }
 
     public List<Transition> getAvailableCurrentTransitions(Workflow workflow)

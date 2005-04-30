@@ -73,6 +73,21 @@ public class State implements Serializable
     {
         return Collections.unmodifiableList( this.transitions );
     }
+    
+    public Transition getTransition(String name)
+    {
+        for (Iterator transIter = this.transitions.iterator(); transIter.hasNext(); )
+        {
+            Transition trans = (Transition) transIter.next();
+            
+            if ( trans.getName().equals( name ) )
+            {
+                return trans;
+            }
+        }
+        
+        return null;
+    }
 
     public Action getAction()
     {
