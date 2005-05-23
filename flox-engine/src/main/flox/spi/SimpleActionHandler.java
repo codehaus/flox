@@ -16,9 +16,24 @@ public class SimpleActionHandler
 {
     private Action action;
 
+    public SimpleActionHandler()
+    {
+        
+    }
+    
     public SimpleActionHandler(Action action)
     {
         this.action = action;
+    }
+    
+    public void setAction(Action action)
+    {
+        this.action = action;
+    }
+    
+    public Action getAction()
+    {
+        return this.action;
     }
 
     public void startAction(Attributes attrs) throws SAXException
@@ -27,10 +42,5 @@ public class SimpleActionHandler
 
     public void endAction() throws SAXException
     {
-    }
-
-    public Action getAction() throws Exception
-    {
-        return this.action;
     }
 }
