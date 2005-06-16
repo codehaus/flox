@@ -46,10 +46,10 @@ public class ProcessReaderHandler
     private StringBuffer characters;
     private Locator locator;
     private Map states;
+    private List orderedStates;
     private WeakState currentState;
     private WeakTransition currentTransition;
     private ActionOwner currentActionOwner;
-    private WeakState firstState;
 
     public ProcessReaderHandler(List<ActionHandlerFactory> actionHandlerFactories,
                                 List<TriggerDefinitionHandlerFactory> triggerDefinitionHandlerFactories)
@@ -329,6 +329,7 @@ public class ProcessReaderHandler
 
         this.process = new Process( name );
         this.states = new HashMap();
+        this.orderedStates = new ArrayList();
 
         this.parseState = PROCESS;
 
@@ -337,9 +338,8 @@ public class ProcessReaderHandler
     public void endProcess() throws SAXException
     {
         //System.err.println( "endProcess" );
-        Collection states = this.states.values();
 
-        for ( Iterator stateIter = states.iterator(); stateIter.hasNext(); )
+        for ( Iterator stateIter = this.orderedStates.iterator(); stateIter.hasNext(); )
         {
             WeakState weakState = (WeakState) stateIter.next();
 
@@ -357,19 +357,7 @@ public class ProcessReaderHandler
             }
         }
 
-        try
-        {
-            this.process.setStartState( this.firstState.getName() );
-        }
-        catch (NoSuchStateException e)
-        {
-            throw new SAXParseException( e.getMessage(),
-                                         this.firstState.getDocumentLocator(),
-                                         e );
-        }
-
-
-        for ( Iterator stateIter = states.iterator(); stateIter.hasNext(); )
+        for ( Iterator stateIter = orderedStates.iterator(); stateIter.hasNext(); )
         {
             WeakState weakState = (WeakState) stateIter.next();
 
@@ -438,14 +426,11 @@ public class ProcessReaderHandler
 
         this.states.put( state.getName(),
                          state );
+        
+        this.orderedStates.add( state );
 
         this.currentState = state;
         this.currentActionOwner = state;
-
-        if ( this.firstState == null )
-        {
-            this.firstState = state;
-        }
 
         this.parseState = STATE;
     }

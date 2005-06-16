@@ -3,8 +3,10 @@ package flox.def;
 import flox.Workflow;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,12 +20,13 @@ public class Process implements Serializable
 {
     private String name;
     private Map<String,State> states;
-    private State startState;
+    private List<State> orderedStates;
 
     public Process(String name)
     {
         this.name = name;
         this.states = new HashMap<String,State>();
+        this.orderedStates = new ArrayList<State>();
     }
 
     public String getName()
@@ -31,16 +34,9 @@ public class Process implements Serializable
         return name;
     }
 
-    public void setStartState(String name) throws NoSuchStateException
-    {
-        State state = getState( name );
-
-        this.startState = state;
-    }
-
     public State getStartState()
     {
-        return startState;
+        return this.orderedStates.get( 0 );
     }
 
     public State newState(String name)
@@ -57,11 +53,8 @@ public class Process implements Serializable
         
         this.states.put( name,
                          state );
-
-        if ( this.startState == null )
-        {
-            this.startState = state;
-        }
+        
+        this.orderedStates.add( state );
 
         return state;
     }
@@ -80,8 +73,8 @@ public class Process implements Serializable
         return state;
     }
     
-    public Collection<State> getStates()
+    public List<State> getStates()
     {
-        return this.states.values();
+        return this.orderedStates;
     }
 }
