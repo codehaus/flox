@@ -361,7 +361,20 @@ public class DefaultWorkflowEngine
     {
         Process process = getProcess( processName );
 
-        return getWorkflowModelDao().getAll( processName );
+        List models = getWorkflowModelDao().getAll( processName );
+        
+        List flows = new ArrayList( models.size() );
+        
+        for ( Iterator modelIter = models.iterator(); modelIter.hasNext(); )
+        {
+            WorkflowModel model = (WorkflowModel) modelIter.next();
+            
+            Workflow flow = new Workflow( this, process, model );
+            
+            flows.add( flow );
+        }
+        
+        return flows;
     }
     
     public List getWorkflows(String processName, String currentStateName) throws NoSuchProcessException, NoSuchStateException
