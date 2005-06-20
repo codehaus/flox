@@ -1,0 +1,25 @@
+<project default="war:webapp"
+  xmlns:j="jelly:core"
+  xmlns:ant="jelly:ant"
+  xmlns:doc="doc">
+    <goal name="build:snapshot">
+        <attainGoal name="war:war"/>
+    </goal>
+    
+  <preGoal name="war:webapp">
+    <attainGoal name="xmlvalidate"/>
+  </preGoal>
+  
+  <goal name="xmlvalidate">
+    <!-- web.xml Config -->
+    <ant:xmlvalidate failonerror="yes" lenient="no" warn="no">
+      <fileset dir="src/webapp/WEB-INF/" includes="web.xml"/>
+      <ant:xmlcatalog>
+        <ant:dtd
+          publicId="-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" 
+          location="src/dtd/web-app_2_3.dtd"/>
+      </ant:xmlcatalog>
+    </ant:xmlvalidate>
+  </goal>
+    
+</project>
