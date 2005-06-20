@@ -14,7 +14,7 @@ import java.util.List;
  * Time: 1:03:27 PM
  * To change this template use File | Settings | File Templates.
  */
-public interface WorkflowModelDao
+public interface WorkflowModelDao extends PageableDao
 {
     void save(WorkflowModel model);
 
@@ -29,4 +29,7 @@ public interface WorkflowModelDao
     List getAll(String processName, State currentState);
     
     List getAll(String processName);
+    
+    Criteria getCriteria(String processName);
+    Criteria getCriteria(String processName, String state);
 }

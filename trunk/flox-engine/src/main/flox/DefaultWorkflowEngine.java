@@ -399,7 +399,7 @@ public class DefaultWorkflowEngine
         return flows;
     }
 
-    State getCurrentState(Workflow workflow)
+    public State getCurrentState(Workflow workflow)
     {
         try
         {
@@ -420,7 +420,7 @@ public class DefaultWorkflowEngine
         }
     }
 
-    List<Transition> getCurrentTransitions(Workflow workflow)
+    public List<Transition> getCurrentTransitions(Workflow workflow)
     {
         State state = getCurrentState( workflow );
 

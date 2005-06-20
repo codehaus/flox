@@ -17,11 +17,11 @@ import java.util.List;
  */
 public class Workflow implements Serializable
 {
-    private transient DefaultWorkflowEngine engine;
+    private transient WorkflowEngine engine;
     private Process process;
     private WorkflowModel model;
 
-    public Workflow(DefaultWorkflowEngine engine,
+    public Workflow(WorkflowEngine engine,
                     Process process,
                     WorkflowModel model)
     {
@@ -30,7 +30,7 @@ public class Workflow implements Serializable
         this.model   = model;
     }
 
-    public DefaultWorkflowEngine getEngine()
+    public WorkflowEngine getEngine()
     {
         return engine;
     }
