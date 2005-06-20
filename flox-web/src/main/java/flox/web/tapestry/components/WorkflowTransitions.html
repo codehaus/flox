@@ -1,0 +1,5 @@
+<div jwcid="@Foreach" source="ognl:transitions" value="ognl:tmpTransition">
+	<span jwcid="@DirectLink" 
+		listener="ognl:listeners.followTransitionAction"
+		parameters="ognl:{workflow.id,tmpTransition.name}">[&nbsp;<span jwcid="@Insert" value="ognl:tmpTransition.name"/>&nbsp;]</span>
+</div>
