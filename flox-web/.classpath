@@ -47,6 +47,8 @@
   </classpathentry>
   <classpathentry kind="var" path="MAVEN_REPO/dom4j/jars/dom4j-1.5.2.jar">
   </classpathentry>
+  <classpathentry kind="var" path="MAVEN_REPO/hibernate/jars/hibernate-3.0.1.jar">
+  </classpathentry>
   <classpathentry kind="var" path="MAVEN_REPO/javassist/jars/javassist-2.5.1.jar">
   </classpathentry>
   <classpathentry kind="var" path="MAVEN_REPO/log4j/jars/log4j-1.2.8.jar">

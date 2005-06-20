@@ -9,6 +9,7 @@ import org.hibernate.util.PropertiesHelper;
 
 import flox.def.State;
 
+import java.util.Iterator;
 import java.util.List;
 import java.io.Serializable;
 
@@ -20,7 +21,7 @@ import java.io.Serializable;
  * To change this template use File | Settings | File Templates.
  */
 public class WorkflowModelDaoImpl
-        extends DaoBase implements WorkflowModelDao
+        extends DaoBase implements WorkflowModelDao, PageableDao
 {
     public WorkflowModelDaoImpl()
     {
@@ -108,5 +109,39 @@ public class WorkflowModelDaoImpl
         {
             throw convertHibernateAccessException( e );
         }
+    }
+
+    public Iterator getCurrentPageRows( int first, int pageSize, String sortColumn, boolean sortOrder, Criteria criteria )
+    {
+        return getCurrentPageRows( WorkflowModel.class, first, pageSize, sortColumn, sortOrder, criteria );
+    }
+    
+    public int countAll(Criteria criteria)
+    {
+        return countAll( WorkflowModel.class, criteria );
+    }
+    
+    public Criteria getCriteria( String processName)
+    {
+        Criteria criteria = createCriteria( WorkflowModel.class );
+        
+        criteria.add( Expression.eq( "processName", processName ) );
+        
+        return criteria;
+    }
+    
+    public Criteria getCriteria( String processName, String currentState )
+    {
+        Criteria criteria = getCriteria( processName );
+        
+        if ( currentState == null )
+        {
+            return criteria;
+        }
+        
+        criteria.createCriteria( "currentState" )
+            .add( Expression.eq( "name", currentState ) );
+        
+        return criteria;
     }
 }

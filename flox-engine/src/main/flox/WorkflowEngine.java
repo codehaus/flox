@@ -2,6 +2,7 @@ package flox;
 
 import flox.def.NoSuchStateException;
 import flox.def.Process;
+import flox.def.State;
 import flox.def.Transition;
 import flox.model.NoSuchModelObjectException;
 import flox.model.StateModel;
@@ -48,4 +49,7 @@ public interface WorkflowEngine
     
     Workflow newWorkflow(String processName)
         throws NoSuchProcessException;
+
+    State getCurrentState(Workflow workflow);
+    List<Transition> getCurrentTransitions(Workflow workflow);
 }

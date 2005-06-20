@@ -9,6 +9,7 @@ import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -19,8 +20,7 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class DaoBase
-        extends HibernateDaoSupport
-
+        extends HibernateDaoSupport 
 {
     public DaoBase()
     {
@@ -133,5 +133,28 @@ public class DaoBase
     protected Criteria createCriteria(Class dataClass)
     {
         return getSession().createCriteria( dataClass );
+    }
+
+    public Iterator getCurrentPageRows(Class t, int first, int pageSize, String sortColumn, boolean sortOrder, Criteria criteria)
+    {
+        if ( criteria == null )
+        {
+            criteria = createCriteria( t );
+        }
+        
+        criteria.setFetchSize( pageSize );
+        criteria.setMaxResults( pageSize );
+        criteria.setFirstResult( first );
+        
+        return criteria.list().iterator();
+    }
+    
+    public int countAll(Class t, Criteria criteria)
+    {
+        if ( criteria == null )
+        {
+            criteria = createCriteria( t );
+        }
+        return criteria.list().size();
     }
 }
