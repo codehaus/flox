@@ -19,17 +19,36 @@ import flox.model.NoSuchModelObjectException;
 
 public abstract class WorkflowTransitions extends BaseComponent
 {
+    private Workflow workflow;
+    
     public abstract WorkflowEngine getWorkflowEngine();
-    public abstract Workflow getWorkflow();
+    
+    public abstract String getProcessParameter();
+    public abstract Object getObjectParameter();
+    public abstract Workflow getWorkflowParameter();
     
     public WorkflowTransitions()
     {
         super();
     }
     
-    public List<Transition> getTransitions()
+    public Workflow getWorkflow() throws NoSuchProcessException, NoSuchModelObjectException
     {
-        return getWorkflowEngine().getAvailableCurrentTransitions( getWorkflow() );
+        Workflow workflow = getWorkflowParameter();
+        
+        if ( workflow == null )
+        {
+            return getWorkflowEngine().getWorkflow( getProcessParameter(), getObjectParameter() );
+        }
+        
+        return workflow;
+    }
+    
+    public List<Transition> getTransitions() throws NoSuchProcessException, NoSuchModelObjectException
+    {
+        Workflow workflow = getWorkflow();
+        
+        return getWorkflowEngine().getAvailableCurrentTransitions( workflow );
     }
     
     public void followTransitionAction(IRequestCycle cycle) throws NoSuchModelObjectException, NoSuchProcessException, TransitionNotManualException

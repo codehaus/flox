@@ -74,6 +74,23 @@ public class WorkflowModelDaoImpl
         }
     }
     
+    public WorkflowModel get(String processName, Object flowedObject)  throws NoSuchModelObjectException
+    {
+        try
+        {
+            return (WorkflowModel) get(WorkflowModel.class,
+                                       Expression.and( Expression.eq( "processName",
+                                                                      processName ),
+                                                       Expression.eq( "flowedObject",
+                                                                      flowedObject ) ) );
+        }
+        catch (HibernateException e)
+        {
+            e.printStackTrace();
+            throw convertHibernateAccessException( e );
+        }
+    }
+    
 
     public List getAll(String processName, State currentState)
     {

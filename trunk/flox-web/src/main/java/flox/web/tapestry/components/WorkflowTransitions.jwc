@@ -5,7 +5,9 @@
 
 	<description>Select states of a process</description>
 	
-	<parameter name="workflow" type="flox.Workflow" direction="auto" required="yes"/>    
+	<parameter name="workflow" property-name="workflowParameter" type="flox.Workflow" direction="in"/>
+	<parameter name="process" property-name="processParameter" type="java.lang.String" direction="in"/>
+	<parameter name="object" property-name="objectParameter" type="java.lang.Object" direction="in"/>
 	
 	<parameter name="workflowEngine" type="flox.WorkflowEngine" direction="auto" required="yes"/>
 	

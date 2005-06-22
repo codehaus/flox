@@ -348,6 +348,18 @@ public class DefaultWorkflowEngine
         return workflow;
     }
     
+    public Workflow getWorkflow(String processName, Object flowedObject) throws NoSuchProcessException, NoSuchModelObjectException
+    {
+        Process process = getProcess( processName );
+        
+        WorkflowModel workflowModel = getWorkflowModelDao().get( processName, flowedObject );
+        
+        Workflow workflow = new Workflow( this, process, workflowModel );
+        
+        return workflow;
+    }
+    
+    
     public Workflow getWorkflow(Long id) throws NoSuchModelObjectException, NoSuchProcessException
     {
         WorkflowModel wfModel = getWorkflowModelDao().get( id );
