@@ -26,6 +26,9 @@ public interface WorkflowModelDao extends PageableDao
                       Criterion flowedObjectCriterion)
             throws NoSuchModelObjectException;
 
+    WorkflowModel get(String processName, Object flowedObject) 
+        throws NoSuchModelObjectException;
+    
     List getAll(String processName, State currentState);
     
     List getAll(String processName);

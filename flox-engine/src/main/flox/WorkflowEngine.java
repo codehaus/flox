@@ -32,6 +32,9 @@ public interface WorkflowEngine
                          Class flowedObjectClass,
                          Criterion flowedObjectCriterion)
             throws NoSuchProcessException, NoSuchModelObjectException;
+    
+    Workflow getWorkflow(String processName, Object flowedObject) 
+        throws NoSuchProcessException, NoSuchModelObjectException;
 
     List getWorkflows(String processName) throws NoSuchProcessException;
 
