@@ -257,7 +257,7 @@ public class DefaultWorkflowEngine
             Transition transition = transIter.next();
 
             TriggerDefinition triggerDef = transition.getTriggerDefinition();
-
+            
             if ( triggerDef == null || triggerDef instanceof AutomaticTriggerDefinition )
             {
                 boolean result = attemptTransition( workflow,
@@ -311,7 +311,7 @@ public class DefaultWorkflowEngine
                    workflow );
 
         Action action = transition.getAction();
-
+        
         if ( action != null )
         {
             try
