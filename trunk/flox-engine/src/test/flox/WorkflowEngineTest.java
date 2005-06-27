@@ -107,20 +107,20 @@ public class WorkflowEngineTest
 
     protected Workflow newWorkflow(String name) throws Exception
     {
-        addProcess( name + ".xml" );
+        addProcess( name );
 
         return this.engine.newWorkflow( name );
     }
 
     protected void addProcess(String name) throws Exception
     {
-        URL url = getClass().getResource( name );
+        URL url = getClass().getResource( name + ".xml" );
 
         ProcessReader reader = (ProcessReader) getBean( "test.processReader" );
 
         Process process = reader.read( url );
 
-        this.engine.addProcess( process );
+        this.engine.addProcess( name, process );
     }
 }
 

@@ -85,12 +85,6 @@ public class ProcessReaderHandler
                              Attributes attrs) throws SAXException
     {
         this.characters = new StringBuffer();
-        //System.err.println( "parseState: " + this.parseState );
-        //System.err.println( "parseState & ROOT: " + ( this.parseState & ROOT ) );
-        //System.err.println( "parseState & PROCESS: " + ( this.parseState & PROCESS ) );
-        //System.err.println( "parseState & STATE: " + ( this.parseState & STATE ) );
-        //System.err.println( "parseState & TRANSITION: " + ( this.parseState & TRANSITION ) );
-        //System.err.println( "parseState & ACTION: " + ( this.parseState & ACTION ) );
 
         if ( ( this.parseState & ROOT ) != 0 )
         {
@@ -316,7 +310,8 @@ public class ProcessReaderHandler
 
     public void startProcess(Attributes attrs) throws SAXException
     {
-        //System.err.println( "startProcess" );
+        /*
+        System.err.println( "startProcess" );
         String name = attrs.getValue( "", "name" );
 
         if ( name == null )
@@ -328,6 +323,8 @@ public class ProcessReaderHandler
         name = name.trim();
 
         this.process = new Process( name );
+        */
+        this.process = new Process();
         this.states = new HashMap();
         this.orderedStates = new ArrayList();
 

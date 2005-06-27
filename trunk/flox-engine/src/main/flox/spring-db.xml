@@ -11,10 +11,10 @@
             <value>jdbc:postgresql://localhost:5432/flox</value>
         </property>
         <property name="username">
-            <value>postgres</value>
+            <value>flox_dbo</value>
         </property>
         <property name="password">
-            <value></value>
+            <value>flox_dbo</value>
         </property>
         <property name="validationQuery">
             <value>SELECT NOW()</value>
@@ -36,12 +36,11 @@
                     <value>getMappings</value>
                 </property>
             </bean>
-
         </property>
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
-                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.show_sql">false</prop>
             </props>
         </property>
         <property name="dataSource">
