@@ -14,18 +14,24 @@ public class DuplicateProcessException
         extends FloxException
 {
     private WorkflowEngine engine;
+    private String name;
     private Process process;
 
-    public DuplicateProcessException(WorkflowEngine engine,
-                                     Process process)
+    public DuplicateProcessException(WorkflowEngine engine, String name, Process process)
     {
         this.engine  = engine;
+        this.name    = name;
         this.process = process;
     }
 
     public WorkflowEngine getEngine()
     {
         return engine;
+    }
+    
+    public String getName()
+    {
+        return name;
     }
 
     public Process getProcess()
@@ -35,6 +41,6 @@ public class DuplicateProcessException
 
     public String getMessage()
     {
-        return "Duplicate process '" + getProcess().getName() + "'";
+        return "Duplicate process '" + getName() + "'";
     }
 }

@@ -18,21 +18,24 @@ import java.util.Map;
  */
 public class Process implements Serializable
 {
-    private String name;
+    //private String name;
     private Map<String,State> states;
     private List<State> orderedStates;
 
-    public Process(String name)
+    //public Process(String name)
+    public Process()
     {
-        this.name = name;
+        //this.name = name;
         this.states = new HashMap<String,State>();
         this.orderedStates = new ArrayList<State>();
     }
 
+    /*
     public String getName()
     {
         return name;
     }
+    */
 
     public State getStartState()
     {

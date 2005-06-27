@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.net.URL;
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 
 /**
@@ -21,6 +22,8 @@ import org.xml.sax.SAXException;
 public class ClassPathProcessLoader
         implements ProcessLoader
 {
+    private static Logger LOGGER = Logger.getLogger( ClassPathProcessLoader.class );
+    
     private ProcessReader processReader;
     private String prefix;
     private List processNames;
@@ -34,7 +37,6 @@ public class ClassPathProcessLoader
     {
         if ( processReader == null )
         {
-            System.err.println( "CREATING NEW PROCESSREADER" );
             processReader = new ProcessReader();
         }
         
@@ -78,15 +80,15 @@ public class ClassPathProcessLoader
             }
             catch (ParserConfigurationException e)
             {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                LOGGER.error( e.getMessage() );
             }
             catch (SAXException e)
             {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                LOGGER.error( e.getMessage() );
             }
             catch (DuplicateProcessException e)
             {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                LOGGER.error( e.getMessage() );
             }
         }
     }
@@ -96,7 +98,7 @@ public class ClassPathProcessLoader
     {
         if ( this.prefix != null )
         {
-            name = this.prefix + "/" + name;
+            name = this.prefix + "/" + name + ".xml";
         }
 
         URL url = getClass().getClassLoader().getResource( name );
@@ -107,7 +109,7 @@ public class ClassPathProcessLoader
             
             Process process = reader.read( url );
 
-            workflowEngine.addProcess( process );
+            workflowEngine.addProcess( name, process );
         }
     }
 }

@@ -74,16 +74,15 @@ public class DefaultWorkflowEngine
         this.processLoader = processLoader;
     }
 
-    public void addProcess(Process process)
+    public void addProcess(String name, Process process)
         throws DuplicateProcessException
     {
-        if ( this.processes.containsKey( process.getName() ) )
+        if ( this.processes.containsKey( name ) )
         {
-            throw new DuplicateProcessException( this,
-                                                 process ); 
+            throw new DuplicateProcessException( this, name, process ); 
         }
 
-        this.processes.put( process.getName(),
+        this.processes.put( name,
                             process );
     }
 

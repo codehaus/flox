@@ -18,13 +18,15 @@ public class WorkflowTableModel extends BaseTableModel
     
     public WorkflowTableModel(WorkflowEngine workflowEngine, WorkflowModelDao dao, Process process)
     {
-        super( dao, dao.getCriteria( process.getName() ) );
+        //super( dao, dao.getCriteria( process.getName() ) );
+        super( dao );
         this.workflowEngine = workflowEngine;
     }
     
     public WorkflowTableModel(WorkflowEngine workflowEngine, WorkflowModelDao dao, Process process, String state)
     {
-        super( dao, dao.getCriteria( process.getName(), state ) );
+        //super( dao, dao.getCriteria( process.getName(), state ) );
+        super( dao );
         this.workflowEngine = workflowEngine;
         this.process        = process;
     }

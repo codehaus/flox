@@ -32,6 +32,6 @@ public class DuplicateStateException
 
     public String getMessage()
     {
-        return "Duplicate state '" + getName() + "' for process '" + getProcess().getName() + "'";
+        return "Duplicate state '" + getName() + "'";
     }
 }

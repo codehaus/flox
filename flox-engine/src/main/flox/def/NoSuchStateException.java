@@ -42,6 +42,6 @@ public class NoSuchStateException
 
     public String getMessage()
     {
-        return "No such state '" + getName() + "' in process '" + getProcess().getName() + "'";
+        return "No such state '" + getName() + "'";
     }
 }

@@ -21,7 +21,7 @@ import org.hibernate.criterion.Criterion;
  */
 public interface WorkflowEngine
 {
-    void addProcess(flox.def.Process process)
+    void addProcess(String name, flox.def.Process process)
         throws DuplicateProcessException;
 
     Collection getProcessNames();
