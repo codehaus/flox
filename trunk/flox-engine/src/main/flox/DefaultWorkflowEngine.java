@@ -11,6 +11,9 @@ import java.util.*;
 
 import org.hibernate.criterion.Criterion;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 
 /**
  * Created by IntelliJ IDEA.
@@ -19,13 +22,14 @@ import org.springframework.beans.factory.InitializingBean;
  * Time: 11:41:30 PM
  * To change this template use File | Settings | File Templates.
  */
-public class DefaultWorkflowEngine
-        implements InitializingBean, WorkflowEngine
+public class DefaultWorkflowEngine implements WorkflowEngine, ApplicationListener
 {
     private WorkflowModelDao workflowModelDao;
     private StateModelDao stateModelDao;
     private ProcessLoader processLoader;
     private Map processes;
+    
+    private Class loadEventClass = ContextRefreshedEvent.class;
 
     private ManualTriggerEvaluator manualTriggerEvaluator;
 
@@ -468,7 +472,29 @@ public class DefaultWorkflowEngine
     {
         return getStateModelDao().getStateSequence( workflow.getModel() );
     }
+    
+    public void setLoadEventClass(Class loadEventClass)
+    {
+        this.loadEventClass = loadEventClass;
+    }
+    
+    public Class getLoadEventClass()
+    {
+        return this.loadEventClass;
+    }
+    
+    public void onApplicationEvent(ApplicationEvent event)
+    {
+        if ( this.loadEventClass.isInstance( event ) )
+        {
+            if ( this.processLoader != null )
+            {   
+                this.processLoader.loadProcesses( this );
+            }
+        }
+    }
 
+    /*
     public void afterPropertiesSet() throws Exception
     {
         if ( this.processLoader != null )
@@ -476,5 +502,6 @@ public class DefaultWorkflowEngine
             this.processLoader.loadProcesses( this );
         }
     }
+    */
 }
 

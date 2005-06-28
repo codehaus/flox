@@ -14,20 +14,22 @@ import flox.model.WorkflowModelDao;
 public class WorkflowTableModel extends BaseTableModel
 {
     private WorkflowEngine workflowEngine;
+    private String processName;
     private Process process;
     
-    public WorkflowTableModel(WorkflowEngine workflowEngine, WorkflowModelDao dao, Process process)
+    public WorkflowTableModel(WorkflowEngine workflowEngine, WorkflowModelDao dao, String processName, Process process)
     {
-        //super( dao, dao.getCriteria( process.getName() ) );
-        super( dao );
+        super( dao, dao.getCriteria( processName ) );
         this.workflowEngine = workflowEngine;
+        this.processName    = processName;
+        this.process        = process;
     }
     
-    public WorkflowTableModel(WorkflowEngine workflowEngine, WorkflowModelDao dao, Process process, String state)
+    public WorkflowTableModel(WorkflowEngine workflowEngine, WorkflowModelDao dao, String processName, Process process, String state)
     {
-        //super( dao, dao.getCriteria( process.getName(), state ) );
-        super( dao );
+        super( dao, dao.getCriteria( processName, state ) );
         this.workflowEngine = workflowEngine;
+        this.processName    = processName;
         this.process        = process;
     }
     
