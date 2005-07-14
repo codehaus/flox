@@ -8,11 +8,13 @@ import org.apache.tapestry.form.IPropertySelectionModel;
 import flox.NoSuchProcessException;
 import flox.WorkflowEngine;
 import flox.def.State;
+import flox.spi.ProcessSourceException;
 
 
 public abstract class StateSelector extends BaseComponent
 {
     public abstract WorkflowEngine getWorkflowEngine();
+    public abstract Object getContext();
     public abstract String getProcess();
     
     public StateSelector()
@@ -20,8 +22,8 @@ public abstract class StateSelector extends BaseComponent
         super();
     }
 
-    public IPropertySelectionModel getStatesModel() throws NoSuchProcessException
+    public IPropertySelectionModel getStatesModel() throws ProcessSourceException, NoSuchProcessException
     {
-        return new StatesPropertySelectionModel( getWorkflowEngine(), getProcess() );
+        return new StatesPropertySelectionModel( getWorkflowEngine(), getContext(), getProcess() );
     }
 }
