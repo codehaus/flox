@@ -39,7 +39,7 @@ public class StateModelDaoImplTest
     public void testSave() throws Exception
     {
         WorkflowModel workflow = new WorkflowModel();
-        workflow.setProcessName( "test process" );
+        workflow.setProcessHandle( "test process" );
 
         StateModel state = new StateModel();
 
@@ -67,15 +67,15 @@ public class StateModelDaoImplTest
                       fetchedState.getWorkflow().getId() );
 
         assertEquals( "same process",
-                      state.getWorkflow().getProcessName(),
-                      fetchedState.getWorkflow().getProcessName() );
+                      state.getWorkflow().getProcessHandle(),
+                      fetchedState.getWorkflow().getProcessHandle() );
     }
 
     public void testGetCurrentState() throws Exception
     {
 
         WorkflowModel workflow = new WorkflowModel();
-        workflow.setProcessName( "test process" );
+        workflow.setProcessHandle( "test process" );
 
         StateModel state = new StateModel();
 

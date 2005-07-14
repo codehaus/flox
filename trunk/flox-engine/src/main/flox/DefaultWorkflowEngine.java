@@ -6,6 +6,9 @@ import flox.model.*;
 import flox.spi.ManualTriggerEvaluator;
 import flox.spi.Action;
 import flox.spi.Predicate;
+import flox.spi.ProcessHandle;
+import flox.spi.ProcessSource;
+import flox.spi.ProcessSourceException;
 
 import java.util.*;
 
@@ -22,20 +25,17 @@ import org.springframework.context.event.ContextRefreshedEvent;
  * Time: 11:41:30 PM
  * To change this template use File | Settings | File Templates.
  */
-public class DefaultWorkflowEngine implements WorkflowEngine, ApplicationListener
+public class DefaultWorkflowEngine implements WorkflowEngine
 {
     private WorkflowModelDao workflowModelDao;
     private StateModelDao stateModelDao;
-    private ProcessLoader processLoader;
-    private Map processes;
     
-    private Class loadEventClass = ContextRefreshedEvent.class;
-
+    private ProcessSource processSource;
+    
     private ManualTriggerEvaluator manualTriggerEvaluator;
 
     public DefaultWorkflowEngine()
     {
-        this.processes = new HashMap();     
     }
 
     public WorkflowModelDao getWorkflowModelDao()
@@ -68,61 +68,43 @@ public class DefaultWorkflowEngine implements WorkflowEngine, ApplicationListene
         this.manualTriggerEvaluator = manualTriggerEvaluator;
     }
 
-    public ProcessLoader getProcessLoader()
+    public ProcessSource getProcessSource()
     {
-        return processLoader;
+        return processSource;
     }
 
-    public void setProcessLoader(ProcessLoader processLoader)
+    public void setProcessSource(ProcessSource processSource)
     {
-        this.processLoader = processLoader;
+        this.processSource = processSource;
     }
 
-    public void addProcess(String name, Process process)
-        throws DuplicateProcessException
+    public Process getProcess(Object context, String name)
+        throws ProcessSourceException, NoSuchProcessException
     {
-        if ( this.processes.containsKey( name ) )
-        {
-            throw new DuplicateProcessException( this, name, process ); 
-        }
-
-        this.processes.put( name,
-                            process );
-    }
-
-    public Process getProcess(String name)
-        throws NoSuchProcessException
-    {
-        Process process = (Process) this.processes.get( name );
+        Process process = getProcessSource().getProcess( context, name );
 
         if ( process == null )
         {
-            throw new NoSuchProcessException( this,
-                                              name );
+            throw new NoSuchProcessException( this, name );
         }
-
+        
         return process;
     }
 
-    public Collection getProcessNames()
+    public Workflow newWorkflow(Object context, String processName)
+        throws ProcessSourceException, NoSuchProcessException
     {
-        return this.processes.keySet();
-    }
-
-    public Workflow newWorkflow(String processName)
-        throws NoSuchProcessException
-    {
-        return newWorkflow( processName, null );
+        return newWorkflow( context, processName, null );
     }
     
-    public Workflow newWorkflow(String processName, Object flowedObject)
-        throws NoSuchProcessException
+    public Workflow newWorkflow(Object context, String processName, Object flowedObject)
+        throws ProcessSourceException, NoSuchProcessException
     {
-        Process process = getProcess( processName );
+        Process process = getProcess( context, processName );
 
         WorkflowModel workflowModel = new WorkflowModel( flowedObject );
         
-        workflowModel.setProcessName( processName );
+        workflowModel.setProcessHandle( processName );
         getWorkflowModelDao().save( workflowModel );
     
         Workflow workflow = new Workflow( this,
@@ -139,8 +121,8 @@ public class DefaultWorkflowEngine implements WorkflowEngine, ApplicationListene
         return workflow;
     }
     
-    public boolean attemptManualTransition(Long workflowId,
-                                           String transitionName) throws NoSuchModelObjectException, NoSuchProcessException, TransitionNotManualException
+    public boolean attemptManualTransition(Long workflowId, String transitionName) 
+        throws ProcessSourceException, NoSuchModelObjectException, NoSuchProcessException, TransitionNotManualException
     {
         Workflow workflow = getWorkflow( workflowId );
         
@@ -153,8 +135,9 @@ public class DefaultWorkflowEngine implements WorkflowEngine, ApplicationListene
         return attemptManualTransition( workflow,
                                         transition );
     }
-    public boolean attemptManualTransition(Workflow workflow,
-                                           Transition transition) throws TransitionNotManualException
+    
+    public boolean attemptManualTransition(Workflow workflow, Transition transition) 
+        throws TransitionNotManualException
     {
         if ( ! ( transition.getTriggerDefinition() instanceof ManualTriggerDefinition )  )
         {
@@ -228,8 +211,7 @@ public class DefaultWorkflowEngine implements WorkflowEngine, ApplicationListene
         }
     }
     
-    private void exitState(Date now,
-                           Workflow workflow)
+    private void exitState(Date now, Workflow workflow)
     {
         try
         {
@@ -276,8 +258,7 @@ public class DefaultWorkflowEngine implements WorkflowEngine, ApplicationListene
         return false;
     }
     
-    private boolean attemptTransition(Workflow workflow,
-                                      Transition transition)
+    private boolean attemptTransition(Workflow workflow, Transition transition)
     {
         State state = workflow.getCurrentState();
         List<Transition> transitions = state.getTransitions();
@@ -305,8 +286,7 @@ public class DefaultWorkflowEngine implements WorkflowEngine, ApplicationListene
         return false;
     }
     
-    private void followTransition(Workflow workflow,
-                                  Transition transition)
+    private void followTransition(Workflow workflow, Transition transition)
     {
         Date now = new Date();
 
@@ -333,12 +313,10 @@ public class DefaultWorkflowEngine implements WorkflowEngine, ApplicationListene
                     transition.getDestination() );
     }
 
-    public Workflow getWorkflow(String processName,
-                                Class flowedObjectClass,
-                                Criterion flowedObjectCriterion)
-            throws NoSuchProcessException, NoSuchModelObjectException
+    public Workflow getWorkflow(Object context, String processName, Class flowedObjectClass, Criterion flowedObjectCriterion)
+            throws ProcessSourceException, NoSuchProcessException, NoSuchModelObjectException
     {
-        Process process = getProcess( processName );
+        Process process = getProcess( context, processName );
 
         WorkflowModel workflowModel = getWorkflowModelDao().get( processName,
                                                                  flowedObjectClass,
@@ -351,9 +329,10 @@ public class DefaultWorkflowEngine implements WorkflowEngine, ApplicationListene
         return workflow;
     }
     
-    public Workflow getWorkflow(String processName, Object flowedObject) throws NoSuchProcessException, NoSuchModelObjectException
+    public Workflow getWorkflow(Object context, String processName, Object flowedObject) 
+        throws ProcessSourceException, NoSuchProcessException, NoSuchModelObjectException
     {
-        Process process = getProcess( processName );
+        Process process = getProcess( context, processName );
         
         WorkflowModel workflowModel = getWorkflowModelDao().get( processName, flowedObject );
         
@@ -363,18 +342,22 @@ public class DefaultWorkflowEngine implements WorkflowEngine, ApplicationListene
     }
     
     
-    public Workflow getWorkflow(Long id) throws NoSuchModelObjectException, NoSuchProcessException
+    public Workflow getWorkflow(Long id) 
+        throws ProcessSourceException, NoSuchModelObjectException, NoSuchProcessException
     {
         WorkflowModel wfModel = getWorkflowModelDao().get( id );
         
-        Process process = getProcess( wfModel.getProcessName() );
+        ProcessHandle handle = new ProcessHandle( wfModel.getProcessHandle() );
+        
+        Process process = getProcess( handle, wfModel.getProcessHandle() );
         
         return new Workflow( this, process, wfModel );
     }
 
-    public List getWorkflows(String processName) throws NoSuchProcessException
+    public List getWorkflows(Object context, String processName) 
+        throws ProcessSourceException, NoSuchProcessException
     {
-        Process process = getProcess( processName );
+        Process process = getProcess( context, processName );
 
         List models = getWorkflowModelDao().getAll( processName );
         
@@ -392,9 +375,10 @@ public class DefaultWorkflowEngine implements WorkflowEngine, ApplicationListene
         return flows;
     }
     
-    public List getWorkflows(String processName, String currentStateName) throws NoSuchProcessException, NoSuchStateException
+    public List getWorkflows(Object context, String processName, String currentStateName) 
+        throws ProcessSourceException, NoSuchProcessException, NoSuchStateException
     {
-        Process process = getProcess( processName );
+        Process process = getProcess( context, processName );
         
         State currentState = process.getState( currentStateName );
         
@@ -472,36 +456,5 @@ public class DefaultWorkflowEngine implements WorkflowEngine, ApplicationListene
     {
         return getStateModelDao().getStateSequence( workflow.getModel() );
     }
-    
-    public void setLoadEventClass(Class loadEventClass)
-    {
-        this.loadEventClass = loadEventClass;
-    }
-    
-    public Class getLoadEventClass()
-    {
-        return this.loadEventClass;
-    }
-    
-    public void onApplicationEvent(ApplicationEvent event)
-    {
-        if ( this.loadEventClass.isInstance( event ) )
-        {
-            if ( this.processLoader != null )
-            {   
-                this.processLoader.loadProcesses( this );
-            }
-        }
-    }
-
-    /*
-    public void afterPropertiesSet() throws Exception
-    {
-        if ( this.processLoader != null )
-        {   
-            this.processLoader.loadProcesses( this );
-        }
-    }
-    */
 }
 

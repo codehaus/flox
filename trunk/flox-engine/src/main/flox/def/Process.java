@@ -1,6 +1,7 @@
 package flox.def;
 
 import flox.Workflow;
+import flox.spi.ProcessHandle;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -18,24 +19,25 @@ import java.util.Map;
  */
 public class Process implements Serializable
 {
-    //private String name;
+    private ProcessHandle processHandle;
     private Map<String,State> states;
     private List<State> orderedStates;
 
-    //public Process(String name)
     public Process()
     {
-        //this.name = name;
         this.states = new HashMap<String,State>();
         this.orderedStates = new ArrayList<State>();
     }
-
-    /*
-    public String getName()
+    
+    public ProcessHandle getProcessHandle()
     {
-        return name;
+        return processHandle;
     }
-    */
+    
+    public void setProcessHandle(ProcessHandle processHandle)
+    {
+        this.processHandle = processHandle;
+    }
 
     public State getStartState()
     {

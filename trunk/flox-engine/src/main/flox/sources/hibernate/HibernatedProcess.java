@@ -1,4 +1,4 @@
-package flox.hibernate;
+package flox.sources.hibernate;
 
 public class HibernatedProcess
 {

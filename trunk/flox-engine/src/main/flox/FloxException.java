@@ -18,4 +18,9 @@ public class FloxException
     {
         super( cause );
     }
+    
+    public FloxException(String message)
+    {
+        super( message );
+    }
 }

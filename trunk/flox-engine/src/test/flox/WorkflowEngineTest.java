@@ -7,12 +7,14 @@ import flox.io.ProcessReader;
 import flox.def.*;
 import flox.def.Process;
 import flox.model.StateModel;
+import flox.sources.classpath.ClassPathProcessSource;
+import flox.spi.ProcessSource;
 
 import java.net.URL;
 import java.util.List;
 
 public class WorkflowEngineTest 
-        extends FloxTestCase
+        extends FloxTestCase 
 {
     private WorkflowEngine engine;
 
@@ -24,7 +26,7 @@ public class WorkflowEngineTest
     public void setUp() throws Exception
     {
         super.setUp();
-        this.engine = (WorkflowEngine) getBean( "test.workflowEngine" );
+        this.engine = (WorkflowEngine) getBean( "workflowEngine" );
     }
 
     public void tearDown() throws Exception
@@ -107,20 +109,7 @@ public class WorkflowEngineTest
 
     protected Workflow newWorkflow(String name) throws Exception
     {
-        addProcess( name );
-
-        return this.engine.newWorkflow( name );
-    }
-
-    protected void addProcess(String name) throws Exception
-    {
-        URL url = getClass().getResource( name + ".xml" );
-
-        ProcessReader reader = (ProcessReader) getBean( "test.processReader" );
-
-        Process process = reader.read( url );
-
-        this.engine.addProcess( name, process );
+        return this.engine.newWorkflow( this, name );
     }
 }
 
