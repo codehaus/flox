@@ -13,7 +13,7 @@
             </generator>
         </id>
 
-        <property name="processName" type="string"/>
+        <property name="processHandle" type="string"/>
 
         <any id-type="long" name="flowedObject">
             <column name="flowedObjectClass"/>

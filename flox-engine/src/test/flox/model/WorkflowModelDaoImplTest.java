@@ -44,7 +44,7 @@ public class WorkflowModelDaoImplTest
     public void testSave() throws Exception
     {
         WorkflowModel workflow = new WorkflowModel();
-        workflow.setProcessName( "test process" );
+        workflow.setProcessHandle( "test process" );
 
         WorkflowModelDao workflowDao = (WorkflowModelDao) getBean( "workflowModelDao" );
 
@@ -59,8 +59,8 @@ public class WorkflowModelDaoImplTest
                       fetchedWorkflow.getId() );
 
         assertEquals( "same process",
-                      workflow.getProcessName(),
-                      fetchedWorkflow.getProcessName() );
+                      workflow.getProcessHandle(),
+                      fetchedWorkflow.getProcessHandle() );
     }
 
     public void testGetByFlowedObjectCriteria() throws Exception
@@ -74,7 +74,7 @@ public class WorkflowModelDaoImplTest
         projectDao.save( project );
 
         WorkflowModel workflow = new WorkflowModel();
-        workflow.setProcessName( "test process" );
+        workflow.setProcessHandle( "test process" );
         workflow.setFlowedObject( project );
 
         WorkflowModelDao workflowDao = (WorkflowModelDao) getBean( "workflowModelDao" );

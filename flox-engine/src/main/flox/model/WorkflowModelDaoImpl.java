@@ -39,7 +39,7 @@ public class WorkflowModelDaoImpl
         return (WorkflowModel) get( WorkflowModel.class, id );
     }
     
-    public WorkflowModel get(String processName,
+    public WorkflowModel get(String processHandle,
                              Class flowedObjectClass,
                              Criterion flowedObjectCriterion)
             throws NoSuchModelObjectException
@@ -62,8 +62,8 @@ public class WorkflowModelDaoImpl
             Object flowedObject = matchingFlowedObjects.get( 0 );
 
             return (WorkflowModel) get(WorkflowModel.class,
-                                       Expression.and( Expression.eq( "processName",
-                                                                      processName ),
+                                       Expression.and( Expression.eq( "processHandle",
+                                                                      processHandle ),
                                                        Expression.eq( "flowedObject",
                                                                       flowedObject ) ) );
         }
@@ -74,13 +74,13 @@ public class WorkflowModelDaoImpl
         }
     }
     
-    public WorkflowModel get(String processName, Object flowedObject)  throws NoSuchModelObjectException
+    public WorkflowModel get(String processHandle, Object flowedObject)  throws NoSuchModelObjectException
     {
         try
         {
             return (WorkflowModel) get(WorkflowModel.class,
-                                       Expression.and( Expression.eq( "processName",
-                                                                      processName ),
+                                       Expression.and( Expression.eq( "processHandle",
+                                                                      processHandle ),
                                                        Expression.eq( "flowedObject",
                                                                       flowedObject ) ) );
         }
@@ -92,11 +92,11 @@ public class WorkflowModelDaoImpl
     }
     
 
-    public List getAll(String processName, State currentState)
+    public List getAll(String processHandle, State currentState)
     {
         Criteria criteria = createCriteria( WorkflowModel.class );
 
-        criteria.add( Expression.eq( "processName", processName ) );
+        criteria.add( Expression.eq( "processHandle", processHandle ) );
         
         criteria.createCriteria( "currentState" )
             .add( Expression.eq( "name", currentState.getName() ) );
@@ -111,12 +111,12 @@ public class WorkflowModelDaoImpl
         }
     }
 
-    public List getAll(String processName)
+    public List getAll(String processHandle)
     {
         Criteria criteria = createCriteria( WorkflowModel.class );
 
-        criteria.add( Expression.eq( "processName",
-                                     processName ) );
+        criteria.add( Expression.eq( "processHandle",
+                                     processHandle ) );
 
         try
         {
@@ -138,18 +138,18 @@ public class WorkflowModelDaoImpl
         return countAll( WorkflowModel.class, criteria );
     }
     
-    public Criteria getCriteria( String processName)
+    public Criteria getCriteria( String processHandle)
     {
         Criteria criteria = createCriteria( WorkflowModel.class );
         
-        criteria.add( Expression.eq( "processName", processName ) );
+        criteria.add( Expression.eq( "processHandle", processHandle ) );
         
         return criteria;
     }
     
-    public Criteria getCriteria( String processName, String currentState )
+    public Criteria getCriteria( String processHandle, String currentState )
     {
-        Criteria criteria = getCriteria( processName );
+        Criteria criteria = getCriteria( processHandle );
         
         if ( currentState == null )
         {

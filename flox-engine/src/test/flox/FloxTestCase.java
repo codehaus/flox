@@ -31,8 +31,7 @@ public abstract class FloxTestCase
     {
         super.setUp();
 
-        this.appContext = new ClassPathXmlApplicationContext( new String[] { "flox/spring.xml",
-                                                                             "flox/test-spring.xml" } );
+        this.appContext = new ClassPathXmlApplicationContext(  "flox/test-spring.xml" );
     }
 
     public void tearDown()

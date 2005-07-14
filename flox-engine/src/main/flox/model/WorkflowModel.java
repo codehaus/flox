@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class WorkflowModel implements Serializable
 {
     private Long id;
-    private String processName;
+    private String processHandle;
     private Object flowedObject;
     private StateModel currentState;
 
@@ -35,14 +35,14 @@ public class WorkflowModel implements Serializable
         this.id = id;
     }
 
-    public String getProcessName()
+    public String getProcessHandle()
     {
-        return processName;
+        return processHandle;
     }
 
-    public void setProcessName(String processName)
+    public void setProcessHandle(String processName)
     {
-        this.processName = processName;
+        this.processHandle = processName;
     }
 
     public Object getFlowedObject()
@@ -68,7 +68,7 @@ public class WorkflowModel implements Serializable
     public String toString()
     {
         return "[WorkflowModel: id=" + this.id +
-            "; processName=" + this.processName +
+            "; processName=" + this.processHandle +
             "; flowedObject=" + this.flowedObject + "]";
     }
 }
