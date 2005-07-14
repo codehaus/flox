@@ -8,20 +8,23 @@ import flox.NoSuchProcessException;
 import flox.WorkflowEngine;
 import flox.def.NoSuchStateException;
 import flox.def.State;
+import flox.spi.ProcessSourceException;
 
 
 public class StatesPropertySelectionModel
     implements IPropertySelectionModel
 {
     private WorkflowEngine workflowEngine;
+    private Object context;
     private String process;
     private List<State> states;
     
-    public StatesPropertySelectionModel(WorkflowEngine workflowEngine, String process) throws NoSuchProcessException
+    public StatesPropertySelectionModel(WorkflowEngine workflowEngine, Object context, String process) throws ProcessSourceException, NoSuchProcessException
     {
         this.workflowEngine = workflowEngine;
+        this.context = context;
         this.process = process;
-        this.states = workflowEngine.getProcess( process ).getStates();
+        this.states = workflowEngine.getProcess( context, process ).getStates();
     }
 
     public int getOptionCount()
@@ -42,7 +45,11 @@ public class StatesPropertySelectionModel
         
         try
         {
-            num = workflowEngine.getWorkflows( process, state ).size();
+            num = workflowEngine.getWorkflows( context, process, state ).size();
+        }
+        catch ( ProcessSourceException e )
+        {
+            num = 0;
         }
         catch ( NoSuchStateException e )
         {

@@ -11,11 +11,13 @@ import flox.Workflow;
 import flox.WorkflowEngine;
 import flox.def.NoSuchStateException;
 import flox.def.State;
+import flox.spi.ProcessSourceException;
 
 
 public abstract class ForeachWorkflow extends BaseComponent
 {
     public abstract WorkflowEngine getWorkflowEngine();
+    public abstract Object getContext();
     public abstract String getProcess();
     public abstract String getState();
     
@@ -24,15 +26,15 @@ public abstract class ForeachWorkflow extends BaseComponent
         super();
     }
     
-    public List<Workflow> getWorkflows() throws NoSuchStateException, NoSuchProcessException
+    public List<Workflow> getWorkflows() throws ProcessSourceException, NoSuchStateException, NoSuchProcessException
     {
         if ( getState() == null )
         {
-            return getWorkflowEngine().getWorkflows( getProcess() );
+            return getWorkflowEngine().getWorkflows( getContext(), getProcess() );
         }
         else
         {
-            return getWorkflowEngine().getWorkflows( getProcess(), getState() );
+            return getWorkflowEngine().getWorkflows( getContext(), getProcess(), getState() );
         }
     }
 }
