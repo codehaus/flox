@@ -13,18 +13,7 @@ import flox.spi.ProcessSourceException;
 import java.util.*;
 
 import org.hibernate.criterion.Criterion;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.context.ApplicationEvent;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
 
-/**
- * Created by IntelliJ IDEA.
- * User: bob
- * Date: Mar 15, 2005
- * Time: 11:41:30 PM
- * To change this template use File | Settings | File Templates.
- */
 public class DefaultWorkflowEngine implements WorkflowEngine
 {
     private WorkflowModelDao workflowModelDao;
