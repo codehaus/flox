@@ -105,15 +105,10 @@ public class HibernateProcessSource extends HibernateDaoSupport implements Proce
     
     public Process getProcess(Object context, String name) throws ProcessSourceException
     {
-        System.err.println( "context: " + context );
-        System.err.println( "name: " + name );
-        
         if ( context == null )
         {
             new Exception().printStackTrace();
         }
-        
-        //getSession().update( context );
         
         ProcessHandle handle = null;
         

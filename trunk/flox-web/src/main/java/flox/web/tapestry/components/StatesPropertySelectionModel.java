@@ -21,9 +21,6 @@ public class StatesPropertySelectionModel
     
     public StatesPropertySelectionModel(WorkflowEngine workflowEngine, Object context, String process) throws ProcessSourceException, NoSuchProcessException
     {
-        System.err.println( "wfEngine:" + workflowEngine );
-        System.err.println( "context:" + context );
-        System.err.println( "process:" + process );
         this.workflowEngine = workflowEngine;
         this.context = context;
         this.process = process;
