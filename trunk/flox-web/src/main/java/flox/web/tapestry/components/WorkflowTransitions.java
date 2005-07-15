@@ -26,6 +26,7 @@ public abstract class WorkflowTransitions extends BaseComponent
     public abstract void setWorkflowEngine(WorkflowEngine workflowEngine);
     
     public abstract Workflow getWorkflow();
+    public abstract void setWorkflow(Workflow workflow);
     
     public WorkflowTransitions()
     {
@@ -35,6 +36,8 @@ public abstract class WorkflowTransitions extends BaseComponent
     public List<Transition> getTransitions() throws ProcessSourceException, NoSuchProcessException, NoSuchModelObjectException
     {
         Workflow workflow = getWorkflow();
+        
+        System.err.println( "workflow: " + workflow );
         
         return getWorkflowEngine().getAvailableCurrentTransitions( workflow );
     }
