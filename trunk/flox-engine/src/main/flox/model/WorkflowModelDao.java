@@ -33,6 +33,6 @@ public interface WorkflowModelDao extends PageableDao
     
     List getAll(String processName);
     
-    Criteria getCriteria(String processName);
-    Criteria getCriteria(String processName, String state);
+    Criteria getCriteria(String processHandle);
+    Criteria getCriteria(String processHandle, String state);
 }
