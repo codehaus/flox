@@ -14,8 +14,13 @@ import flox.spi.ProcessSourceException;
 public abstract class StateSelector extends BaseComponent
 {
     public abstract WorkflowEngine getWorkflowEngine();
+    public abstract void setWorkflowEngine(WorkflowEngine workflowEngine);
+    
     public abstract Object getContext();
+    public abstract void setContext(Object context);
+    
     public abstract String getProcess();
+    public abstract void setProcess(String processName);
     
     public StateSelector()
     {

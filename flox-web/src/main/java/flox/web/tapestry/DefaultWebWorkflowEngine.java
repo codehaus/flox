@@ -25,6 +25,9 @@ public class DefaultWebWorkflowEngine extends DefaultWorkflowEngine implements W
     public WorkflowTableModel getWorkflowTableModel(Object context, String processName, String stateName) 
         throws ProcessSourceException, NoSuchProcessException
     {
+        System.err.println( "processName: " + processName );
+        System.err.println( "stateName: " + stateName );
+        
         Process process = getProcess( context, processName );
         
         return new WorkflowTableModel( this, getWorkflowModelDao(), process, stateName );

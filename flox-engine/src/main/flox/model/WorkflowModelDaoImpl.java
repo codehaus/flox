@@ -7,6 +7,7 @@ import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.util.PropertiesHelper;
 
+import flox.def.Process;
 import flox.def.State;
 
 import java.util.Iterator;
@@ -74,8 +75,10 @@ public class WorkflowModelDaoImpl
         }
     }
     
-    public WorkflowModel get(String processHandle, Object flowedObject)  throws NoSuchModelObjectException
+    public WorkflowModel get(Process process, Object flowedObject)  throws NoSuchModelObjectException
     {
+        String processHandle = process.getProcessHandle().getHandle();
+        
         try
         {
             return (WorkflowModel) get(WorkflowModel.class,
@@ -92,9 +95,11 @@ public class WorkflowModelDaoImpl
     }
     
 
-    public List getAll(String processHandle, State currentState)
+    public List getAll(Process process, State currentState)
     {
         Criteria criteria = createCriteria( WorkflowModel.class );
+        
+        String processHandle = process.getProcessHandle().getHandle();
 
         criteria.add( Expression.eq( "processHandle", processHandle ) );
         
@@ -111,9 +116,11 @@ public class WorkflowModelDaoImpl
         }
     }
 
-    public List getAll(String processHandle)
+    public List getAll(Process process)
     {
         Criteria criteria = createCriteria( WorkflowModel.class );
+        
+        String processHandle = process.getProcessHandle().getHandle();
 
         criteria.add( Expression.eq( "processHandle",
                                      processHandle ) );
