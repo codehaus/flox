@@ -310,20 +310,6 @@ public class ProcessReaderHandler
 
     public void startProcess(Attributes attrs) throws SAXException
     {
-        /*
-        System.err.println( "startProcess" );
-        String name = attrs.getValue( "", "name" );
-
-        if ( name == null )
-        {
-            throw new SAXParseException( "attribute 'name' required on <process>",
-                                         this.locator );
-        }
-
-        name = name.trim();
-
-        this.process = new Process( name );
-        */
         this.process = new Process();
         this.states = new HashMap();
         this.orderedStates = new ArrayList();
@@ -334,8 +320,6 @@ public class ProcessReaderHandler
 
     public void endProcess() throws SAXException
     {
-        //System.err.println( "endProcess" );
-
         for ( Iterator stateIter = this.orderedStates.iterator(); stateIter.hasNext(); )
         {
             WeakState weakState = (WeakState) stateIter.next();
@@ -401,7 +385,6 @@ public class ProcessReaderHandler
 
     public void startState(Attributes attrs) throws SAXException
     {
-        //System.err.println( "startState" );
         String name = attrs.getValue( "", "name" );
 
         if ( name == null )
@@ -434,7 +417,6 @@ public class ProcessReaderHandler
 
     public void endState() throws SAXException
     {
-        //System.err.println( "endState" );
         this.currentState = null;
         this.currentActionOwner = null;
         this.parseState = PROCESS;
@@ -443,7 +425,6 @@ public class ProcessReaderHandler
     public void startAction(ActionHandler handler,
                             Attributes attrs) throws SAXException
     {
-        //System.err.println( "startAction" );
         this.actionHandler = handler;
         this.actionHandler.setDocumentLocator( this.locator );
         this.actionHandler.startAction( attrs );
@@ -453,7 +434,6 @@ public class ProcessReaderHandler
 
     public void endAction() throws SAXException
     {
-        //System.err.println( "endAction" );
         this.actionHandler.endAction();
         this.delegationDepth = 0;
 
@@ -581,7 +561,6 @@ public class ProcessReaderHandler
 
     public void startTransition(Attributes attrs) throws SAXException
     {
-        //System.err.println( "startTransition" );
         String name = attrs.getValue( "", "name" );
         String to   = attrs.getValue( "", "to" );
 
@@ -623,7 +602,6 @@ public class ProcessReaderHandler
 
     public void endTransition() throws SAXException
     {
-        //System.err.println( "endTransition" );
         this.currentTransition = null;
         this.currentActionOwner = null;
         this.parseState = STATE;

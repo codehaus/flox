@@ -37,7 +37,6 @@ public class BaseTableModel implements IBasicTableModel
 
     public int getRowCount()
     {
-        System.err.println( "num results: " + pageableDao.countAll( this.criteria ) );
         return pageableDao.countAll( this.criteria );
     }
 
