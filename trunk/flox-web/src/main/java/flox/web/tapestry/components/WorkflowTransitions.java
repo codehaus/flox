@@ -23,27 +23,13 @@ public abstract class WorkflowTransitions extends BaseComponent
     private Workflow workflow;
     
     public abstract WorkflowEngine getWorkflowEngine();
+    public abstract void setWorkflowEngine(WorkflowEngine workflowEngine);
     
-    public abstract Object getContextParameter();
-    public abstract String getProcessParameter();
-    public abstract Object getObjectParameter();
-    public abstract Workflow getWorkflowParameter();
+    public abstract Workflow getWorkflow();
     
     public WorkflowTransitions()
     {
         super();
-    }
-    
-    public Workflow getWorkflow() throws ProcessSourceException, NoSuchProcessException, NoSuchModelObjectException
-    {
-        Workflow workflow = getWorkflowParameter();
-        
-        if ( workflow == null )
-        {
-            return getWorkflowEngine().getWorkflow( getContextParameter(), getProcessParameter(), getObjectParameter() );
-        }
-        
-        return workflow;
     }
     
     public List<Transition> getTransitions() throws ProcessSourceException, NoSuchProcessException, NoSuchModelObjectException
