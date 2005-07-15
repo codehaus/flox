@@ -66,6 +66,19 @@ public class DefaultWorkflowEngine implements WorkflowEngine
     {
         this.processSource = processSource;
     }
+    
+    public Process getProcess(ProcessHandle handle)
+        throws ProcessSourceException, NoSuchProcessException
+    {
+        Process process = getProcessSource().getProcess( handle );
+        
+        if ( process == null )
+        {
+            throw new NoSuchProcessException( this, handle.getHandle() );
+        }
+        
+        return process;
+    }
 
     public Process getProcess(Object context, String name)
         throws ProcessSourceException, NoSuchProcessException
@@ -93,7 +106,7 @@ public class DefaultWorkflowEngine implements WorkflowEngine
 
         WorkflowModel workflowModel = new WorkflowModel( flowedObject );
         
-        workflowModel.setProcessHandle( processName );
+        workflowModel.setProcessHandle( process.getProcessHandle().getHandle() );
         getWorkflowModelDao().save( workflowModel );
     
         Workflow workflow = new Workflow( this,
@@ -323,7 +336,7 @@ public class DefaultWorkflowEngine implements WorkflowEngine
     {
         Process process = getProcess( context, processName );
         
-        WorkflowModel workflowModel = getWorkflowModelDao().get( processName, flowedObject );
+        WorkflowModel workflowModel = getWorkflowModelDao().get( process, flowedObject );
         
         Workflow workflow = new Workflow( this, process, workflowModel );
         
@@ -338,7 +351,7 @@ public class DefaultWorkflowEngine implements WorkflowEngine
         
         ProcessHandle handle = new ProcessHandle( wfModel.getProcessHandle() );
         
-        Process process = getProcess( handle, wfModel.getProcessHandle() );
+        Process process = getProcess( handle );
         
         return new Workflow( this, process, wfModel );
     }
@@ -348,7 +361,7 @@ public class DefaultWorkflowEngine implements WorkflowEngine
     {
         Process process = getProcess( context, processName );
 
-        List models = getWorkflowModelDao().getAll( processName );
+        List models = getWorkflowModelDao().getAll( process );
         
         List flows = new ArrayList( models.size() );
         
@@ -371,7 +384,7 @@ public class DefaultWorkflowEngine implements WorkflowEngine
         
         State currentState = process.getState( currentStateName );
         
-        List models = getWorkflowModelDao().getAll( processName, currentState );
+        List models = getWorkflowModelDao().getAll( process, currentState );
         
         List flows = new ArrayList( models.size() );
         

@@ -26,6 +26,7 @@ public class WorkflowTableModel extends BaseTableModel
     public WorkflowTableModel(WorkflowEngine workflowEngine, WorkflowModelDao dao, Process process, String state)
     {
         super( dao, dao.getCriteria( process.getProcessHandle().getHandle(), state ) );
+        System.err.println( "processHandle: " + process.getProcessHandle() );
         this.workflowEngine = workflowEngine;
         this.process        = process;
     }

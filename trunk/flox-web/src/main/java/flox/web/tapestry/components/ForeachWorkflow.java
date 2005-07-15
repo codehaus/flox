@@ -12,14 +12,22 @@ import flox.WorkflowEngine;
 import flox.def.NoSuchStateException;
 import flox.def.State;
 import flox.spi.ProcessSourceException;
+import flox.web.tapestry.WebWorkflowEngine;
 
 
 public abstract class ForeachWorkflow extends BaseComponent
 {
     public abstract WorkflowEngine getWorkflowEngine();
+    public abstract void setWorkflowEngine(WorkflowEngine engine);
+    
     public abstract Object getContext();
+    public abstract void setContext(Object context);
+    
     public abstract String getProcess();
+    public abstract void setProcess(String processName);
+    
     public abstract String getState();
+    public abstract void setState(String stateName);
     
     public ForeachWorkflow()
     {

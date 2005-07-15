@@ -3,6 +3,7 @@ package flox.model;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Criterion;
 
+import flox.def.Process;
 import flox.def.State;
 
 import java.util.List;
@@ -26,12 +27,14 @@ public interface WorkflowModelDao extends PageableDao
                       Criterion flowedObjectCriterion)
             throws NoSuchModelObjectException;
 
-    WorkflowModel get(String processName, Object flowedObject) 
+    WorkflowModel get(Process process, Object flowedObject) 
         throws NoSuchModelObjectException;
     
-    List getAll(String processName, State currentState);
+    //List getAll(String processName, State currentState);
+    //List getAll(String processName);
     
-    List getAll(String processName);
+    List<WorkflowModel> getAll(Process process);
+    List<WorkflowModel> getAll(Process process, State state);
     
     Criteria getCriteria(String processHandle);
     Criteria getCriteria(String processHandle, String state);

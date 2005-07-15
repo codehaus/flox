@@ -19,8 +19,10 @@ import flox.spi.InvalidProcessHandleException;
 import flox.spi.ProcessHandle;
 import flox.spi.ProcessSource;
 import flox.spi.ProcessSourceException;
+import flox.spi.ProcessStorer;
+import flox.spi.ProcessStorerException;
 
-public class HibernateProcessSource extends HibernateDaoSupport implements ProcessSource
+public class HibernateProcessSource extends HibernateDaoSupport implements ProcessSource, ProcessStorer
 {
     private ProcessReader processReader;
     
@@ -103,6 +105,16 @@ public class HibernateProcessSource extends HibernateDaoSupport implements Proce
     
     public Process getProcess(Object context, String name) throws ProcessSourceException
     {
+        System.err.println( "context: " + context );
+        System.err.println( "name: " + name );
+        
+        if ( context == null )
+        {
+            new Exception().printStackTrace();
+        }
+        
+        //getSession().update( context );
+        
         ProcessHandle handle = null;
         
         if ( context == null )
@@ -111,9 +123,24 @@ public class HibernateProcessSource extends HibernateDaoSupport implements Proce
         }
         else
         {
-            handle = new ProcessHandle( context.getClass().getName() + "|" + getSession().getIdentifier( context ) + "|" + name );
+            handle = new ProcessHandle( context.getClass().getName() + "|" 
+                    + getSession().getIdentifier( context ) 
+                    + "|" + name );
         }
         
         return getProcess( handle );
+    }
+    
+    public void save(Object context, String name, String definitionXml) throws ProcessStorerException
+    {
+        getSession().update( context );
+        
+        HibernatedProcess process = new HibernatedProcess();
+        
+        process.setContext( context );
+        process.setName( name );
+        process.setDefinitionXml( definitionXml );
+        
+        getSession().saveOrUpdate( process );
     }
 }

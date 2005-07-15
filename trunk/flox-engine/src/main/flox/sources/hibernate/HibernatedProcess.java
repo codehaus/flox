@@ -2,6 +2,7 @@ package flox.sources.hibernate;
 
 public class HibernatedProcess
 {
+    private Long id;
     private Object context;
     private String name;
     private String definitionXml;
@@ -9,6 +10,16 @@ public class HibernatedProcess
     public HibernatedProcess()
     {
         super();
+    }
+    
+    public Long getId()
+    {
+        return this.id;
+    }
+    
+    public void setId(Long id)
+    {
+        this.id = id;
     }
     
     public Object getContext()
