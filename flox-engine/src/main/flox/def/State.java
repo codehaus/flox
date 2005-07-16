@@ -14,6 +14,7 @@ import java.util.*;
  */
 public class State implements Serializable
 {
+    private static final long serialVersionUID = 3257291344035721272L;
 
     private Process process;
 
@@ -72,13 +73,11 @@ public class State implements Serializable
 
     public Transition getTransition( String name )
     {
-        for ( Iterator transIter = this.transitions.iterator(); transIter.hasNext(); )
+        for ( Transition transition : transitions )
         {
-            Transition trans = ( Transition ) transIter.next();
-
-            if ( trans.getName().equals( name ) )
+            if ( transition.getName().equals( name ) )
             {
-                return trans;
+                return transition;
             }
         }
 

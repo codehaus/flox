@@ -4,6 +4,8 @@ import flox.FloxException;
 
 public class ProcessSourceException extends FloxException
 {
+    private static final long serialVersionUID = 3258408426357733684L;
+    
     private ProcessSource processSource;
 
     public ProcessSourceException(ProcessSource processSource)

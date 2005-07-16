@@ -1,11 +1,9 @@
 package flox.def;
 
-import flox.Workflow;
 import flox.spi.ProcessHandle;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +17,8 @@ import java.util.Map;
  */
 public class Process implements Serializable
 {
+    private static final long serialVersionUID = 3257006549032841264L;
+    
     private ProcessHandle processHandle;
     private Map<String,State> states;
     private List<State> orderedStates;

@@ -12,6 +12,8 @@ import flox.def.Transition;
 public class TransitionNotManualException
         extends FloxException
 {
+    private static final long serialVersionUID = 3617851963111717173L;
+    
     private Workflow workflow;
     private Transition transition;
 

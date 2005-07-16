@@ -1,24 +1,14 @@
 package flox.sources.classpath;
 
-import flox.WorkflowEngine;
 import flox.def.Process;
-import flox.io.ProcessReader;
 import flox.sources.AbstractProcessSource;
 import flox.spi.InvalidProcessHandleException;
 import flox.spi.ProcessHandle;
-import flox.spi.ProcessSource;
 import flox.spi.ProcessSourceException;
 
-import javax.xml.parsers.ParserConfigurationException;
-import java.util.List;
-import java.util.Iterator;
-import java.util.StringTokenizer;
-import java.net.URL;
-import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.log4j.Logger;
-import org.xml.sax.SAXException;
 
 /**
  * Created by IntelliJ IDEA.

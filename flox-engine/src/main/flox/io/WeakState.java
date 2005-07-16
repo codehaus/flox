@@ -19,7 +19,7 @@ public class WeakState
         implements ActionOwner
 {
     private String name;
-    private List transitions;
+    private List<WeakTransition> transitions;
     private Action action;
 
     public WeakState(Locator locator,
@@ -27,7 +27,7 @@ public class WeakState
     {
         super( locator );
         this.name = name;
-        this.transitions = new ArrayList();
+        this.transitions = new ArrayList<WeakTransition>();
     }
 
     public String getName()
@@ -40,7 +40,7 @@ public class WeakState
         this.transitions.add( transition );
     }
 
-    public List getTransitions()
+    public List<WeakTransition> getTransitions()
     {
         return transitions;
     }

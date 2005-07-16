@@ -10,6 +10,8 @@ package flox.def;
 public class ManualTriggerDefinition
         extends TriggerDefinition
 {
+    private static final long serialVersionUID = 3761130452936568889L;
+
     public ManualTriggerDefinition()
     {
 

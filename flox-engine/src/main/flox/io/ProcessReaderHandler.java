@@ -45,8 +45,8 @@ public class ProcessReaderHandler
     private Process process;
     private StringBuffer characters;
     private Locator locator;
-    private Map states;
-    private List orderedStates;
+    private Map<String,WeakState> states;
+    private List<WeakState> orderedStates;
     private WeakState currentState;
     private WeakTransition currentTransition;
     private ActionOwner currentActionOwner;
@@ -311,8 +311,8 @@ public class ProcessReaderHandler
     public void startProcess(Attributes attrs) throws SAXException
     {
         this.process = new Process();
-        this.states = new HashMap();
-        this.orderedStates = new ArrayList();
+        this.states = new HashMap<String,WeakState>();
+        this.orderedStates = new ArrayList<WeakState>();
 
         this.parseState = PROCESS;
 
@@ -320,10 +320,8 @@ public class ProcessReaderHandler
 
     public void endProcess() throws SAXException
     {
-        for ( Iterator stateIter = this.orderedStates.iterator(); stateIter.hasNext(); )
+        for ( WeakState weakState : this.orderedStates )
         {
-            WeakState weakState = (WeakState) stateIter.next();
-
             try
             {
                 State state = this.process.newState( weakState.getName() );
@@ -338,16 +336,12 @@ public class ProcessReaderHandler
             }
         }
 
-        for ( Iterator stateIter = orderedStates.iterator(); stateIter.hasNext(); )
+        for ( WeakState weakState : this.orderedStates )
         {
-            WeakState weakState = (WeakState) stateIter.next();
+            List<WeakTransition> transitions = weakState.getTransitions();
 
-            List transitions = weakState.getTransitions();
-
-            for ( Iterator transIter = transitions.iterator(); transIter.hasNext(); )
+            for ( WeakTransition weakTransition : transitions )
             {
-                WeakTransition weakTransition = (WeakTransition) transIter.next();
-
                 try
                 {
                     State origin = this.process.getState( weakState.getName() );
@@ -576,10 +570,8 @@ public class ProcessReaderHandler
                                          this.locator );
         }
 
-        for ( Iterator transIter = this.currentState.getTransitions().iterator(); transIter.hasNext(); )
+        for ( WeakTransition weakTransition : this.currentState.getTransitions() )
         {
-            WeakTransition weakTransition = (WeakTransition) transIter.next();
-
             if ( weakTransition.getName().equals( name ) )
             {
                 throw new SAXParseException( "duplicate transition '" + name + "' for state '" + this.currentState.getName() + "'",

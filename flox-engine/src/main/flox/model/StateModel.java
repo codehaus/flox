@@ -12,6 +12,8 @@ import java.util.Date;
  */
 public class StateModel implements Serializable
 {
+    private static final long serialVersionUID = 3258134643651130425L;
+    
     private Long id;
     private WorkflowModel workflow;
     private String name;

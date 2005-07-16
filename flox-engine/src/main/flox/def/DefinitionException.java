@@ -12,6 +12,8 @@ import flox.FloxException;
 public class DefinitionException
         extends FloxException
 {
+    private static final long serialVersionUID = 3760559789121287223L;
+
     public DefinitionException()
     {
 

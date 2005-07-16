@@ -1,11 +1,9 @@
 package flox.model;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-import flox.FloxTestCase;
-
 import java.util.Date;
+
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 public class StateModelDaoImplTest 
         extends DaoTestCase

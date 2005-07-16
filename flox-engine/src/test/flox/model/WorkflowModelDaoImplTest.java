@@ -1,14 +1,10 @@
 package flox.model;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-import flox.FloxTestCase;
-
 import java.util.Date;
 
-import org.hibernate.Criteria;
-import org.hibernate.Session;
+import junit.framework.Test;
+import junit.framework.TestSuite;
+
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Expression;
 

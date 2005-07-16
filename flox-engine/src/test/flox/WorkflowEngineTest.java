@@ -1,16 +1,9 @@
 package flox;
 
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import flox.io.ProcessReader;
-import flox.def.*;
-import flox.def.Process;
 import flox.model.StateModel;
-import flox.sources.classpath.ClassPathProcessSource;
-import flox.spi.ProcessSource;
 
-import java.net.URL;
 import java.util.List;
 
 public class WorkflowEngineTest 

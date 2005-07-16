@@ -1,12 +1,12 @@
 package flox;
 
-import flox.model.WorkflowModel;
+import java.io.Serializable;
+import java.util.List;
+
 import flox.def.Process;
 import flox.def.State;
 import flox.def.Transition;
-
-import java.io.Serializable;
-import java.util.List;
+import flox.model.WorkflowModel;
 
 /**
  * Created by IntelliJ IDEA.
@@ -17,6 +17,8 @@ import java.util.List;
  */
 public class Workflow implements Serializable
 {
+    private static final long serialVersionUID = 3256719589432963378L;
+    
     private transient WorkflowEngine engine;
     private Process process;
     private WorkflowModel model;

@@ -1,17 +1,12 @@
 package flox.sources.hibernate;
 
-import java.io.IOException;
 import java.util.List;
-
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
-import org.hibernate.type.Type;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
-import org.xml.sax.SAXException;
 
 import flox.def.Process;
 import flox.io.ProcessReader;

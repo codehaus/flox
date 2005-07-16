@@ -30,16 +30,16 @@ public class WorkflowTableModel extends BaseTableModel
         this.process        = process;
     }
     
-    public Iterator getCurrentPageRows(int first, int pageSize, ITableColumn objSortColumn, boolean sortOrder)
+    public Iterator<Workflow> getCurrentPageRows(int first, int pageSize, ITableColumn objSortColumn, boolean sortOrder)
     {
-        final Iterator iterator = super.getCurrentPageRows( first, pageSize, objSortColumn, sortOrder );
+        final Iterator<WorkflowModel> iterator = (Iterator<WorkflowModel>) super.getCurrentPageRows( first, pageSize, objSortColumn, sortOrder );
         
-        return new Iterator()   {
+        return new Iterator<Workflow>()   {
             public boolean hasNext() {
                 return iterator.hasNext();
             }
-            public Object next() {
-                return new Workflow( workflowEngine, process, (WorkflowModel) iterator.next() );
+            public Workflow next() {
+                return new Workflow( workflowEngine, process, iterator.next() );
             }
             public void remove() {
                 iterator.remove();
