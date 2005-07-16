@@ -1,5 +1,9 @@
 package flox;
 
+import java.util.List;
+
+import org.hibernate.criterion.Criterion;
+
 import flox.def.NoSuchStateException;
 import flox.def.Process;
 import flox.def.State;
@@ -7,11 +11,6 @@ import flox.def.Transition;
 import flox.model.NoSuchModelObjectException;
 import flox.model.StateModel;
 import flox.spi.ProcessSourceException;
-
-import java.util.Collection;
-import java.util.List;
-
-import org.hibernate.criterion.Criterion;
 
 /**
  * Created by IntelliJ IDEA.
@@ -31,10 +30,10 @@ public interface WorkflowEngine
     Workflow getWorkflow(Object context, String processName, Object flowedObject) 
         throws ProcessSourceException, NoSuchProcessException, NoSuchModelObjectException;
 
-    List getWorkflows(Object context, String processName) 
+    List<Workflow> getWorkflows(Object context, String processName) 
         throws ProcessSourceException, NoSuchProcessException;
 
-    List getWorkflows(Object context, String processName, String currentState) 
+    List<Workflow> getWorkflows(Object context, String processName, String currentState) 
         throws ProcessSourceException, NoSuchProcessException, NoSuchStateException;
     
     List<Transition> getAvailableCurrentTransitions(Workflow workflow);

@@ -1,9 +1,7 @@
 package flox.model;
 
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
-import org.springframework.orm.hibernate3.SessionFactoryUtils;
 import org.hibernate.Criteria;
-import org.hibernate.Session;
 import org.hibernate.HibernateException;
 import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Criterion;
@@ -51,8 +49,8 @@ public class DaoBase
 
         try
         {
-            List results = criteria.list();
-
+            List<?> results = criteria.list();
+            
             if ( results.isEmpty() )
             {
                 throw new NoSuchModelObjectException( t,
@@ -99,7 +97,7 @@ public class DaoBase
 
         try
         {
-            List results = criteria.list();
+            List<?> results = criteria.list();
 
             if ( results.isEmpty() )
             {

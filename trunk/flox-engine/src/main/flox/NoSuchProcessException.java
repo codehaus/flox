@@ -10,6 +10,8 @@ package flox;
 public class NoSuchProcessException
         extends FloxException
 {
+    private static final long serialVersionUID = 3689355433286513206L;
+    
     private WorkflowEngine engine;
     private String name;
 

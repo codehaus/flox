@@ -1,7 +1,6 @@
 package flox.io;
 
 import flox.spi.Predicate;
-import flox.spi.Predicate;
 import flox.spi.Action;
 import flox.def.TriggerDefinition;
 import org.xml.sax.Locator;

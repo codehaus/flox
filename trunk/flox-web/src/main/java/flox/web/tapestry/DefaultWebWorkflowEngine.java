@@ -3,7 +3,6 @@ package flox.web.tapestry;
 import flox.DefaultWorkflowEngine;
 import flox.NoSuchProcessException;
 import flox.def.Process;
-import flox.def.State;
 import flox.spi.ProcessSourceException;
 import flox.web.tapestry.model.WorkflowTableModel;
 

@@ -10,6 +10,8 @@ package flox;
 public class FloxException
         extends Exception
 {
+    private static final long serialVersionUID = 3257846571704791095L;
+
     public FloxException()
     {
     }

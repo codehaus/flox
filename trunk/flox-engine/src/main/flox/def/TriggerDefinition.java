@@ -11,5 +11,5 @@ import java.io.Serializable;
  */
 public class TriggerDefinition implements Serializable
 {
-    
+    private static final long serialVersionUID = 3257845467814376755L;
 }

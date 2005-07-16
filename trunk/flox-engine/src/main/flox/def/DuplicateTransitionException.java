@@ -10,6 +10,8 @@ package flox.def;
 public class DuplicateTransitionException
         extends DefinitionException
 {
+    private static final long serialVersionUID = 3257853185954625337L;
+    
     private State state;
     private String name;
     private State destination;

@@ -1,18 +1,32 @@
 package flox;
 
-import flox.def.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.hibernate.criterion.Criterion;
+
+import flox.def.AutomaticTriggerDefinition;
+import flox.def.ManualTriggerDefinition;
+import flox.def.NoSuchStateException;
 import flox.def.Process;
-import flox.model.*;
-import flox.spi.ManualTriggerEvaluator;
+import flox.def.State;
+import flox.def.Transition;
+import flox.def.TriggerDefinition;
+import flox.model.NoSuchModelObjectException;
+import flox.model.StateModel;
+import flox.model.StateModelDao;
+import flox.model.WorkflowModel;
+import flox.model.WorkflowModelDao;
 import flox.spi.Action;
+import flox.spi.ManualTriggerEvaluator;
 import flox.spi.Predicate;
 import flox.spi.ProcessHandle;
 import flox.spi.ProcessSource;
 import flox.spi.ProcessSourceException;
-
-import java.util.*;
-
-import org.hibernate.criterion.Criterion;
 
 public class DefaultWorkflowEngine implements WorkflowEngine
 {
@@ -356,42 +370,37 @@ public class DefaultWorkflowEngine implements WorkflowEngine
         return new Workflow( this, process, wfModel );
     }
 
-    public List getWorkflows(Object context, String processName) 
+    public List<Workflow> getWorkflows(Object context, String processName) 
         throws ProcessSourceException, NoSuchProcessException
     {
         Process process = getProcess( context, processName );
 
-        List models = getWorkflowModelDao().getAll( process );
+        List<WorkflowModel> models = getWorkflowModelDao().getAll( process );
         
-        List flows = new ArrayList( models.size() );
+        List<Workflow> flows = new ArrayList<Workflow>( models.size() );
         
-        for ( Iterator modelIter = models.iterator(); modelIter.hasNext(); )
+        for ( WorkflowModel model : models )
         {
-            WorkflowModel model = (WorkflowModel) modelIter.next();
-            
             Workflow flow = new Workflow( this, process, model );
-            
             flows.add( flow );
         }
         
         return flows;
     }
     
-    public List getWorkflows(Object context, String processName, String currentStateName) 
+    public List<Workflow> getWorkflows(Object context, String processName, String currentStateName) 
         throws ProcessSourceException, NoSuchProcessException, NoSuchStateException
     {
         Process process = getProcess( context, processName );
         
         State currentState = process.getState( currentStateName );
         
-        List models = getWorkflowModelDao().getAll( process, currentState );
+        List<WorkflowModel> models = getWorkflowModelDao().getAll( process, currentState );
         
-        List flows = new ArrayList( models.size() );
+        List<Workflow> flows = new ArrayList<Workflow>( models.size() );
         
-        for ( Iterator modelIter = models.iterator(); modelIter.hasNext(); )
+        for ( WorkflowModel model : models )
         {
-            WorkflowModel model = (WorkflowModel) modelIter.next();
-            
             Workflow flow = new Workflow( this, process, model );
             
             flows.add( flow );

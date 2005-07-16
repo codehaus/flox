@@ -10,6 +10,8 @@ package flox.def;
 public class ProcessMismatchException
         extends DefinitionException
 {
+    private static final long serialVersionUID = 3905240126224610872L;
+    
     private State origin;
     private State destination;
 

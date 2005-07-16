@@ -4,15 +4,12 @@ import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Expression;
-import org.hibernate.criterion.Restrictions;
-import org.hibernate.util.PropertiesHelper;
 
 import flox.def.Process;
 import flox.def.State;
 
 import java.util.Iterator;
 import java.util.List;
-import java.io.Serializable;
 
 /**
  * Created by IntelliJ IDEA.

@@ -1,6 +1,5 @@
 package flox;
 
-import flox.def.*;
 import flox.def.Process;
 
 /**
@@ -13,6 +12,8 @@ import flox.def.Process;
 public class DuplicateProcessException
         extends FloxException
 {
+    private static final long serialVersionUID = 3545794369106817329L;
+    
     private WorkflowEngine engine;
     private String name;
     private Process process;

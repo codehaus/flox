@@ -2,7 +2,6 @@ package flox.spi;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 
 /**
  * Created by IntelliJ IDEA.

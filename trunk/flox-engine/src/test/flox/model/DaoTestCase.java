@@ -1,13 +1,6 @@
 package flox.model;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 import flox.FloxTestCase;
-import org.hibernate.SessionFactory;
-import org.hibernate.Session;
-import org.hibernate.Criteria;
-import org.springframework.orm.hibernate.SessionFactoryUtils;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;

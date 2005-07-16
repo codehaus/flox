@@ -11,6 +11,8 @@ import java.io.Serializable;
  */
 public class WorkflowModel implements Serializable
 {
+    private static final long serialVersionUID = 4050198622488441913L;
+    
     private Long id;
     private String processHandle;
     private Object flowedObject;

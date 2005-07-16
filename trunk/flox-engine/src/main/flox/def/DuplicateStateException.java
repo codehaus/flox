@@ -10,6 +10,8 @@ package flox.def;
 public class DuplicateStateException
         extends DefinitionException
 {
+    private static final long serialVersionUID = 3256442503862761778L;
+    
     private Process process;
     private String name;
 

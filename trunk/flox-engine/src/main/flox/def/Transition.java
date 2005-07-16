@@ -14,6 +14,8 @@ import flox.spi.Action;
  */
 public class Transition implements Serializable
 {
+    private static final long serialVersionUID = 4122536591940989748L;
+    
     private String name;
     private State origin;
     private State destination;
