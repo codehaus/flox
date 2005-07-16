@@ -13,4 +13,6 @@
     <component-type type="ForeachWorkflow" specification-path="/flox/web/tapestry/components/ForeachWorkflow.jwc"/>
     <component-type type="WorkflowTransitions" specification-path="/flox/web/tapestry/components/WorkflowTransitions.jwc"/>
     
+    <component-type type="WorkflowImage" specification-path="/flox/web/tapestry/components/WorkflowImage.jwc"/>
+    
 </library-specification>

@@ -10,6 +10,7 @@ import flox.def.State;
 import flox.def.Transition;
 import flox.model.NoSuchModelObjectException;
 import flox.model.StateModel;
+import flox.spi.ProcessHandle;
 import flox.spi.ProcessSourceException;
 
 /**
@@ -22,6 +23,9 @@ import flox.spi.ProcessSourceException;
 public interface WorkflowEngine
 {
     Process getProcess(Object context, String name) 
+        throws ProcessSourceException, NoSuchProcessException;
+    
+    Process getProcess(ProcessHandle processHandle)
         throws ProcessSourceException, NoSuchProcessException;
     
     Workflow getWorkflow(Object context, String processName, Class flowedObjectClass, Criterion flowedObjectCriterion)

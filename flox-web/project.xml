@@ -316,6 +316,22 @@
                 <war.bundle>true</war.bundle>
             </properties>
         </dependency>
+		<dependency>
+			<groupId>jung</groupId>
+			<artifactId>jung</artifactId>
+			<version>1.6.0</version>
+            <properties>
+                <dist.bundle>true</dist.bundle>
+            </properties>
+        </dependency>
+		<dependency>
+			<groupId>cern</groupId>
+			<artifactId>colt</artifactId>
+			<version>1.2.0</version>
+            <properties>
+                <dist.bundle>true</dist.bundle>
+            </properties>
+        </dependency>
     </dependencies>
 
   <build>
