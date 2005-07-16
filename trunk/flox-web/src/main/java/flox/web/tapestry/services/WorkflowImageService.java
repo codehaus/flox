@@ -36,6 +36,8 @@ import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.Vertex;
+import edu.uci.ics.jung.graph.decorators.StringLabeller;
+import edu.uci.ics.jung.graph.decorators.StringLabeller.UniqueLabelException;
 import edu.uci.ics.jung.graph.impl.DirectedSparseEdge;
 import edu.uci.ics.jung.graph.impl.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.impl.SimpleDirectedSparseVertex;
@@ -84,16 +86,25 @@ public class WorkflowImageService extends AbstractService
             List<State> states = process.getStates();
 
             Graph graph = new DirectedSparseGraph();
+            StringLabeller labels = StringLabeller.getLabeller( graph );
 
             Map<State, Vertex> vertexIndex = new HashMap<State, Vertex>();
 
             for ( State state : states )
             {
                 SimpleDirectedSparseVertex vertex = new SimpleDirectedSparseVertex();
-
-                vertex.addUserDatum( "name", state.getName(), new UserDataContainer.CopyAction.Shared() );
-
+                
                 graph.addVertex( vertex );
+
+                try
+                {
+                    labels.setLabel( vertex, state.getName() );
+                }
+                catch ( UniqueLabelException e )
+                {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
 
                 vertexIndex.put( state, vertex );
             }
@@ -110,8 +121,8 @@ public class WorkflowImageService extends AbstractService
 
                     DirectedSparseEdge edge = new DirectedSparseEdge( vertex, destVertex );
 
-                    edge.addUserDatum( "name", transition.getName(), new UserDataContainer.CopyAction.Shared() );
-
+                    //labels.setLabel( edge, transition.getName() );
+                    
                     graph.addEdge( edge );
                 }
             }
@@ -122,7 +133,14 @@ public class WorkflowImageService extends AbstractService
             
             layout.initialize( vd );
             
-            BasicRenderer renderer = new BasicRenderer();
+            BasicRenderer renderer = new BasicRenderer() {
+                public void paintVertex(Graphics g, Vertex v, int x, int y) {
+                    System.err.println( "label: " + StringLabeller.getLabeller( (Graph) v.getGraph() ).getLabel( v ) );
+                    super.paintVertex( g, v, x, y );
+                }
+            };
+            
+            renderer.setLabel( "name" );
             
             MyVV viewer = new MyVV( layout, renderer );
             
