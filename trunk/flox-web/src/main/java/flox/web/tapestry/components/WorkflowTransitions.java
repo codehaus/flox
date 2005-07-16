@@ -37,8 +37,6 @@ public abstract class WorkflowTransitions extends BaseComponent
     {
         Workflow workflow = getWorkflow();
         
-        System.err.println( "workflow: " + workflow );
-        
         return getWorkflowEngine().getAvailableCurrentTransitions( workflow );
     }
     
