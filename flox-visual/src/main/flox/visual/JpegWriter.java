@@ -175,14 +175,15 @@ public class JpegWriter implements VertexStringer, VertexFontFunction, VertexSha
         
         if ( state == process.getStartState() )
         {
-            return new Color( 0.0f, 0.7f, 0.0f );
+            //return new Color( 0.0f, 0.7f, 0.0f );
+            return new Color( 0x00, 0x99, 0x00 );
         }
         else if ( vertex.outDegree() == 0 )
         {
-            return new Color( 0.7f, 0.0f, 0.0f );
+            return new Color( 0x99, 0x00, 0x00 );
         }
         
-        return new Color( 0.9f, 0.9f, 0.9f );
+        return new Color( 0xDD, 0xDD, 0xDD );
     }
 }
 

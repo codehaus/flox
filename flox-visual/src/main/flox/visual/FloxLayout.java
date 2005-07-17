@@ -111,7 +111,7 @@ public class FloxLayout extends AbstractLayout
         Coordinates coords = new Coordinates();
         
         double x = ( col * columnWidthPx );
-        double y = ( row * rowHeightPx ) + ( rowHeightPx / 2 );
+        double y = ( row * rowHeightPx ) + 10;
         
         x = x + ( widthPx / 2 ) - ( ( rowWidth - 1 ) * ( columnWidthPx / 2 ) );
         
