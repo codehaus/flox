@@ -8,6 +8,7 @@ import java.util.List;
 
 import edu.uci.ics.jung.graph.Vertex;
 import flox.def.State;
+import flox.visual.jung.FloxLayout;
 
 
 public class Row
@@ -65,7 +66,10 @@ public class Row
                     return -1;
                 }
                 
-                return 0;
+                State s1 = (State) v1.getUserDatum( FloxLayout.STATE );
+                State s2 = (State) v2.getUserDatum( FloxLayout.STATE );
+                
+                return s1.getName().compareTo( s2.getName() );
             }
         });
         
@@ -79,12 +83,10 @@ public class Row
             
             if ( front )
             {
-                System.err.println( state.getName() + " to first" );
                 optimized.addFirst( vertex );
             }
             else
             {
-                System.err.println( state.getName() + " to last" );
                 optimized.addLast( vertex );
             }
              

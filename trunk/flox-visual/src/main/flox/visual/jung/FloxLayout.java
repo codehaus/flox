@@ -1,5 +1,6 @@
-package flox.visual;
+package flox.visual.jung;
 
+import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -15,6 +16,7 @@ import edu.uci.ics.jung.visualization.AbstractLayout;
 import edu.uci.ics.jung.visualization.Coordinates;
 import flox.def.Process;
 import flox.def.State;
+import flox.visual.RowList;
 
 public class FloxLayout extends AbstractLayout
 {
@@ -23,72 +25,63 @@ public class FloxLayout extends AbstractLayout
     
     public final static String COORDS = "flox.visual.FloxLayout.coords";
     
+    private static final int COLUMN_SPACE = 20;
+    private static final int ROW_HEIGHT_MULTIPLIER = 3;
+    
     private RowList rowList;
+    
+    private VertexFunctions vertexFunctions;
+    private int columnWidth;
+    private int rowHeight;
         
-    public FloxLayout(Graph g)
+    public FloxLayout(Graph g, VertexFunctions vertexFunctions, RowList rowList)
     {
         super( g );
+        this.vertexFunctions = vertexFunctions;
+        this.rowList         = rowList;
+        computeSize();
+    }
+    
+    public int getColumnWidth()
+    {
+        return columnWidth;
+    }
+    
+    public int getRowHeight()
+    {
+        return rowHeight;
+    }
+    
+    public int getPreferredWidth()
+    {
+        return rowList.getWidth() * columnWidth;
+    }
+    
+    public int getPreferredHeight()
+    {
+        return rowList.getDepth() * getRowHeight() * ROW_HEIGHT_MULTIPLIER;
     }
 
-    @Override
-    protected void initialize_local()
+    protected void computeSize()
     {
-        Map<State,Vertex> stateToVertex = new HashMap<State,Vertex>();
-        
         Set<Vertex> vertices = getGraph().getVertices();
         
         for ( Vertex vertex : vertices )
         {
-            State state = (State) vertex.getUserDatum( STATE );
+            int width = vertexFunctions.getShapeDimension( vertex ).width;
+            int height = vertexFunctions.getShapeDimension( vertex ).height;
             
-            System.err.println( state.getName() + "/" + vertex );
-            stateToVertex.put( state, vertex );
-        }
-        
-        Process process = (Process) getGraph().getUserDatum( PROCESS );
-        
-        rowList = new RowList();
-        
-        State state = process.getStartState();
-        
-        Vertex vertex = stateToVertex.get( state );
-            
-        rowList.add( 0, vertex );
-        
-        int curRow = 0;
-        
-        Set<Vertex> seenVertices = new HashSet<Vertex>();
-        seenVertices.add( vertex );
-        
-        while ( curRow < rowList.getDepth() )
-        {
-            List<Vertex> rowVertices = rowList.get( curRow ).getVertices();
-            
-            for ( Vertex rowVertex : rowVertices )
+            if ( width > columnWidth )
             {
-                Set<Edge> edges = rowVertex.getOutEdges();
-                
-                for ( Edge edge : edges )
-                {
-                    Vertex destVertex = edge.getOpposite( rowVertex );
-                    
-                    System.err.println( "destination: " + destVertex );
-                    
-                    if ( ! seenVertices.contains( destVertex ) )
-                    {
-                        rowList.add( curRow+1, destVertex );
-                        seenVertices.add( destVertex );
-                    }
-                }
-                
-                seenVertices.add( rowVertex );
+                columnWidth = width;
             }
-            
-            ++curRow;
+            if ( height > rowHeight )
+            {
+                rowHeight =  height;
+            }
         }
         
-        //rowList.dump();
-        rowList.optimize();
+        columnWidth = columnWidth + COLUMN_SPACE;
     }
 
     @Override
@@ -100,24 +93,20 @@ public class FloxLayout extends AbstractLayout
         int widthPx  = this.getCurrentSize().width;
         int heightPx = this.getCurrentSize().height;
         
-        int width = rowList.getWidth();
-        int depth = rowList.getDepth();
-        
         int rowWidth = rowList.getWidth( row );
         
-        int columnWidthPx = widthPx / width;
-        int rowHeightPx = heightPx / depth;
+        int columnWidthPx = getColumnWidth();
+        int rowHeightPx = getRowHeight();
         
         Coordinates coords = new Coordinates();
         
         double x = ( col * columnWidthPx );
-        double y = ( row * rowHeightPx ) + 10;
+        double y = ( row * ( rowHeightPx * ROW_HEIGHT_MULTIPLIER ) );
         
         x = x + ( widthPx / 2 ) - ( ( rowWidth - 1 ) * ( columnWidthPx / 2 ) );
+        y = y + ( rowHeightPx/2 );
         
         State state = (State) vertex.getUserDatum( STATE );
-        
-        System.err.println( "row: " + row + " / state " + state.getName() + " / row width " + rowWidth + " / x " + x );
         
         coords.setX( x );
         coords.setY( y );
@@ -153,6 +142,12 @@ public class FloxLayout extends AbstractLayout
     public boolean incrementsAreDone()
     {
         return false;
+    }
+
+    @Override
+    protected void initialize_local()
+    {
+        // nothing
     }
 
 }

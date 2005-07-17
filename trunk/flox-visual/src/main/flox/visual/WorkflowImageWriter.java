@@ -6,8 +6,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Paint;
-import java.awt.Rectangle;
 import java.awt.Shape;
+import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -15,12 +15,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.sun.image.codec.jpeg.ImageFormatException;
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
+import javax.imageio.ImageIO;
+
+import sun.awt.image.ImageFormatException;
 
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.Vertex;
+import edu.uci.ics.jung.graph.decorators.EdgeShape;
+import edu.uci.ics.jung.graph.decorators.EdgeShapeFunction;
 import edu.uci.ics.jung.graph.decorators.VertexFontFunction;
 import edu.uci.ics.jung.graph.decorators.VertexPaintFunction;
 import edu.uci.ics.jung.graph.decorators.VertexShapeFunction;
@@ -38,16 +40,38 @@ import edu.uci.ics.jung.visualization.contrib.CircleLayout;
 import flox.def.Process;
 import flox.def.State;
 import flox.def.Transition;
+import flox.visual.jung.ExtendedPluggableRenderer;
+import flox.visual.jung.FloxLayout;
+import flox.visual.jung.FloxLayoutSolver;
+import flox.visual.jung.FloxVisualizationViewer;
+import flox.visual.jung.VertexFunctions;
+import flox.visual.jung.VertexLabelPaintFunction;
 
 
-public class JpegWriter implements VertexStringer, VertexFontFunction, VertexShapeFunction, VertexPaintFunction
+public class WorkflowImageWriter 
 {
-    private Dimension size;
+    public static final String JPG = "jpg";
+    public static final String PNG = "png";
+    public static final String GIF = "gif";
+    
+    private String imageType;
+    
     private Process process;
     
-    public JpegWriter()
+    public WorkflowImageWriter(String imageType)
     {
         super();
+        this.imageType = imageType;
+    }
+    
+    public String getImageType()
+    {
+        return this.imageType;
+    }
+    
+    public String getMimeType()
+    {
+        return "image/" + getImageType();
     }
     
     public Process getProcess()
@@ -60,7 +84,14 @@ public class JpegWriter implements VertexStringer, VertexFontFunction, VertexSha
         this.process = process;
     }
 
-    public void write(OutputStream output) throws ImageFormatException, IOException
+    public void write(OutputStream output) throws ImageFormatException, IOException 
+    {
+        BufferedImage image = getImage();
+        
+        ImageIO.write( image, getImageType(), output );
+    }
+    
+    protected BufferedImage getImage() 
     {
         List<State> states = process.getStates();
 
@@ -93,109 +124,53 @@ public class JpegWriter implements VertexStringer, VertexFontFunction, VertexSha
         
         graph.setUserDatum( FloxLayout.PROCESS, process, new UserDataContainer.CopyAction.Shared() );
         
-        FloxLayout layout = new FloxLayout( graph );
+        // --
         
-        layout.initialize( size );
+        VertexFunctions vertexFunctions = new VertexFunctions( process );
         
-        PluggableRenderer renderer = new PluggableRenderer(); 
+        vertexFunctions.setStartColors( new Color( 0x33, 0x66, 0x99 ), Color.black, Color.white );
+        vertexFunctions.setEndColors( new Color( 0x55, 0x55, 0x55 ), Color.black, Color.white );
+        vertexFunctions.setOtherColors( new Color( 0xEE, 0xEE, 0xEE ), Color.black, new Color( 0x33, 0x33, 0x33 ) );
+        vertexFunctions.setFont( new Font( "Verdana", Font.PLAIN, 10 ) );
         
-        renderer.setVertexStringer( this );
-        renderer.setVertexFontFunction( this );
-        renderer.setVertexShapeFunction( this );
+        FloxLayoutSolver solver = new FloxLayoutSolver( graph );
+        FloxLayout layout = new FloxLayout( graph, vertexFunctions, solver.getRowList() ); 
+        
+        Dimension prefSize = new Dimension( layout.getPreferredWidth(), layout.getPreferredHeight() );
+        
+        layout.initialize( prefSize );
+        
+        ExtendedPluggableRenderer renderer = new ExtendedPluggableRenderer(); 
+        
+        BufferedImage image = new BufferedImage( prefSize.width, prefSize.height, BufferedImage.TYPE_INT_RGB );
+        
+        Graphics2D g2 = image.createGraphics();
+        
+        renderer.setVertexStringer( vertexFunctions );
+        renderer.setVertexFontFunction( vertexFunctions );
+        renderer.setVertexShapeFunction( vertexFunctions );
+        renderer.setVertexPaintFunction( vertexFunctions );
+        renderer.setVertexLabelPaintFunction( vertexFunctions );
         renderer.setVertexLabelCentering( true );
-        renderer.setVertexPaintFunction( this );
-        //renderer.setEdgeStringer( new FloxStringer() );
+        
+        renderer.setEdgeShapeFunction( new EdgeShape.Line() );
         
         FloxVisualizationViewer viewer = new FloxVisualizationViewer( layout, renderer );
         
         viewer.setBackground( Color.white );
         viewer.setForeground( Color.black );
         
-        viewer.resize( size );
+        viewer.resize( prefSize );
         
         Dimension ld = layout.getCurrentSize();
-        viewer.setScale( (float) size.width/ld.width, (float) size.height/ld.height );
         
-        BufferedImage image = new BufferedImage( size.width, size.height, BufferedImage.TYPE_INT_RGB );
-
-        Graphics2D g2 = image.createGraphics();
+        viewer.setScale( 1f, 1f );
         
         g2.setBackground( Color.white );
         g2.setColor( Color.black );
         
         viewer.paintComponent( g2 );
         
-        JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder( output );
-        encoder.setJPEGEncodeParam( encoder.getDefaultJPEGEncodeParam( image ) );
-        encoder.encode( image );
-    }
-
-    public void setSize( int x, int y )
-    {
-        this.size = new Dimension( x, y );
-    }
-    
-    public Dimension getSize()
-    {
-        return size;
-    }
-    
-    public String getLabel(Vertex vertex)
-    {
-        State state = (State) vertex.getUserDatum( FloxLayout.STATE );
-        
-        return state.getName();
-    }
-    
-    public Font getFont(Vertex vertex)
-    {
-        return new Font( "SansSerif", Font.BOLD, 9 );
-    }
-    
-    public Shape getShape(Vertex vertex)
-    {
-        int width = 50;
-        int height = 15;
-        
-        double x = ((Coordinates)vertex.getUserDatum( FloxLayout.COORDS )).getX();
-        double y = ((Coordinates)vertex.getUserDatum( FloxLayout.COORDS )).getY();
-        
-        return new Rectangle( 0-(width/2), 0-(height/2), width, height );
-    }
-    
-    public Paint getDrawPaint(Vertex vertex)
-    {
-        return Color.black;
-    }
-    
-    public Paint getFillPaint(Vertex vertex)
-    {
-        State state = (State) vertex.getUserDatum( FloxLayout.STATE );
-        Process process = ( Process ) vertex.getGraph().getUserDatum( FloxLayout.PROCESS );
-        
-        if ( state == process.getStartState() )
-        {
-            //return new Color( 0.0f, 0.7f, 0.0f );
-            return new Color( 0x00, 0x99, 0x00 );
-        }
-        else if ( vertex.outDegree() == 0 )
-        {
-            return new Color( 0x99, 0x00, 0x00 );
-        }
-        
-        return new Color( 0xDD, 0xDD, 0xDD );
-    }
-}
-
-class FloxVisualizationViewer extends VisualizationViewer
-{
-    public FloxVisualizationViewer(Layout layout, Renderer renderer)
-    {
-        super( layout, renderer );
-    }
-    
-    public void paintComponent(Graphics g)
-    {
-        super.paintComponent( g );
+        return image;
     }
 }

@@ -18,29 +18,14 @@ public class RowList
 
     public void add( int depth, Vertex vertex )
     {
-        System.err.println( "add : " + depth + " vertex " + vertex );
-        
-        System.err.println( "A: " + rows.size() );
-        System.err.println( "B: " + (depth-1) );
-        System.err.println( "C: " + ( rows.size() < ( depth -1 ) ) );
-        
         if ( rows.size() < (depth+1) ) 
         {
-            System.err.println( "cursize: " + rows.size() );
-            
             int addRows = depth - rows.size() + 1;
-            
-            System.err.println( "addmore: " + addRows );
             
             for ( int i = 0 ; i < addRows ; ++i )
             {
-                System.err.println( "add row: " + (depth-addRows)+i );
                 this.rows.add( new Row( ( depth - addRows ) + i ) );
             }
-        }
-        else
-        {
-            System.err.println( "nothing to add to " + rows.size() );
         }
         
         rows.get( depth ).add( vertex );
