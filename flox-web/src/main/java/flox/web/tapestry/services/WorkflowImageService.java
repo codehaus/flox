@@ -34,9 +34,12 @@ import samples.graph.BasicRenderer;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
+import edu.uci.ics.jung.graph.Edge;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.Vertex;
+import edu.uci.ics.jung.graph.decorators.EdgeStringer;
 import edu.uci.ics.jung.graph.decorators.StringLabeller;
+import edu.uci.ics.jung.graph.decorators.VertexStringer;
 import edu.uci.ics.jung.graph.decorators.StringLabeller.UniqueLabelException;
 import edu.uci.ics.jung.graph.impl.DirectedSparseEdge;
 import edu.uci.ics.jung.graph.impl.DirectedSparseGraph;
@@ -50,6 +53,7 @@ import edu.uci.ics.jung.visualization.PluggableRenderer;
 import edu.uci.ics.jung.visualization.Renderer;
 import edu.uci.ics.jung.visualization.SpringLayout;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.contrib.CircleLayout;
 import edu.uci.ics.jung.visualization.contrib.KKLayout;
 import flox.NoSuchProcessException;
 import flox.WorkflowEngine;
@@ -58,6 +62,7 @@ import flox.def.State;
 import flox.def.Transition;
 import flox.spi.ProcessHandle;
 import flox.spi.ProcessSourceException;
+import flox.visual.FloxLayout;
 import flox.web.tapestry.ProcessProvider;
 
 public class WorkflowImageService extends AbstractService
@@ -86,7 +91,6 @@ public class WorkflowImageService extends AbstractService
             List<State> states = process.getStates();
 
             Graph graph = new DirectedSparseGraph();
-            StringLabeller labels = StringLabeller.getLabeller( graph );
 
             Map<State, Vertex> vertexIndex = new HashMap<State, Vertex>();
 
@@ -94,18 +98,9 @@ public class WorkflowImageService extends AbstractService
             {
                 SimpleDirectedSparseVertex vertex = new SimpleDirectedSparseVertex();
                 
+                vertex.setUserDatum( "name", state.getName(), new UserDataContainer.CopyAction.Shared() );
+                vertex.setUserDatum( FloxLayout.STATE, state, new UserDataContainer.CopyAction.Shared() );
                 graph.addVertex( vertex );
-
-                try
-                {
-                    labels.setLabel( vertex, state.getName() );
-                }
-                catch ( UniqueLabelException e )
-                {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-
                 vertexIndex.put( state, vertex );
             }
 
@@ -116,31 +111,27 @@ public class WorkflowImageService extends AbstractService
                 for ( Transition transition : state.getTransitions() )
                 {
                     State destState = transition.getDestination();
-
                     Vertex destVertex = vertexIndex.get( destState );
 
                     DirectedSparseEdge edge = new DirectedSparseEdge( vertex, destVertex );
-
-                    //labels.setLabel( edge, transition.getName() );
-                    
+                    edge.setUserDatum( "name", transition.getName(), new UserDataContainer.CopyAction.Shared() );
                     graph.addEdge( edge );
                 }
             }
             
-            Dimension vd = new Dimension( 600, 100 );
+            graph.setUserDatum( FloxLayout.PROCESS, process, new UserDataContainer.CopyAction.Shared() );
+       
+            Dimension vd = new Dimension( 400, 400 );
             
-            FRLayout layout = new FRLayout( graph );
+            //CircleLayout layout = new CircleLayout( graph );
+            FloxLayout layout = new FloxLayout( graph );
             
             layout.initialize( vd );
             
-            BasicRenderer renderer = new BasicRenderer() {
-                public void paintVertex(Graphics g, Vertex v, int x, int y) {
-                    System.err.println( "label: " + StringLabeller.getLabeller( (Graph) v.getGraph() ).getLabel( v ) );
-                    super.paintVertex( g, v, x, y );
-                }
-            };
+            PluggableRenderer renderer = new PluggableRenderer(); 
             
-            renderer.setLabel( "name" );
+            renderer.setVertexStringer( new FloxStringer() );
+            //renderer.setEdgeStringer( new FloxStringer() );
             
             MyVV viewer = new MyVV( layout, renderer );
             
@@ -151,9 +142,9 @@ public class WorkflowImageService extends AbstractService
             //viewer.resize( vd );
             viewer.resize( vd );
             
-            layout.update();
+            //layout.update();
             
-            while ( ! layout.incrementsAreDone() )
+            for ( int i = 0 ; i < 100 ; ++i )
             {
                 layout.advancePositions();
             }
@@ -212,7 +203,19 @@ class MyVV extends VisualizationViewer {
     
     public void paintComponent(Graphics g)
     {
-        System.err.println( "paint component" );
         super.paintComponent( g );
+    }
+}
+
+class FloxStringer implements VertexStringer, EdgeStringer 
+{
+    public String getLabel( Vertex v )
+    {
+        return (String) v.getUserDatum( "name" );
+    }
+
+    public String getLabel( Edge e )
+    {
+        return (String) e.getUserDatum( "name" );
     }
 }

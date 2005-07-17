@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <project>
   <pomVersion>3</pomVersion>
-  <name>flox-engine</name>
+  <name>flox-visual</name>
   <groupId>flox</groupId>
-  <artifactId>flox-engine</artifactId>
+  <artifactId>flox-visual</artifactId>
   <currentVersion>0.1</currentVersion>
   <organization>
     <name>OpenXource</name>
@@ -43,113 +43,18 @@
   
     <dependencies>
         <dependency>
-            <groupId>springframework</groupId>
-            <artifactId>spring</artifactId>
-            <version>1.2-rc2</version>
+            <groupId>flox</groupId>
+            <artifactId>flox-engine</artifactId>
+            <version>SNAPSHOT</version>
             <properties>
                 <war.bundle>true</war.bundle>
-            </properties>
-        </dependency>
-        <dependency>
-            <groupId>commons-dbcp</groupId>
-            <artifactId>commons-dbcp</artifactId>
-            <version>1.2.1</version>
-            <properties>
-                <war.bundle>true</war.bundle>
-            </properties>
-        </dependency>
-        <dependency>
-            <groupId>commons-pool</groupId>
-            <artifactId>commons-pool</artifactId>
-            <version>1.2</version>
-            <properties>
-                <war.bundle>true</war.bundle>
-            </properties>
-        </dependency>
-        <dependency>
-            <groupId>jta</groupId>
-            <artifactId>jta</artifactId>
-            <version>1.0.1b</version>
-            <properties>
-                <war.bundle>true</war.bundle>
-            </properties>
-        </dependency>
-        <dependency>
-            <groupId>dom4j</groupId>
-            <artifactId>dom4j</artifactId>
-            <version>1.5.2</version>
-            <properties>
-                <war.bundle>true</war.bundle>
+				<eclipse.dependency>true</eclipse.dependency>
             </properties>
         </dependency>
         <dependency>
             <groupId>commons-collections</groupId>
             <artifactId>commons-collections</artifactId>
             <version>3.1</version>
-            <properties>
-                <war.bundle>true</war.bundle>
-            </properties>
-        </dependency>
-        <dependency>
-            <groupId>ehcache</groupId>
-            <artifactId>ehcache</artifactId>
-            <version>0.9</version>
-            <properties>
-                <war.bundle>true</war.bundle>
-            </properties>
-        </dependency>
-        <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib</artifactId>
-            <version>2.0.2</version>
-            <properties>
-                <war.bundle>true</war.bundle>
-            </properties>
-        </dependency>
-        <dependency>
-            <groupId>asm</groupId>
-            <artifactId>asm</artifactId>
-            <version>1.4.3</version>
-            <properties>
-                <war.bundle>true</war.bundle>
-            </properties>
-        </dependency>
-        <dependency>
-            <groupId>asm</groupId>
-            <artifactId>asm-util</artifactId>
-            <version>1.4.3</version>
-            <properties>
-                <war.bundle>true</war.bundle>
-            </properties>
-        </dependency>
-        <dependency>
-            <groupId>hibernate</groupId>
-            <artifactId>hibernate</artifactId>
-            <version>3.0.1</version>
-            <properties>
-                <war.bundle>true</war.bundle>
-            </properties>
-        </dependency>
-        <dependency>
-            <groupId>postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>8.0-b1-308-jdbc3</version>
-            <properties>
-                <war.bundle>true</war.bundle>
-            </properties>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>3.8.1</version>
-            <properties>
-                <war.bundle>true</war.bundle>
-            </properties>
-        </dependency>
-        <dependency>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging</artifactId>
-            <version>1.0.4</version>
             <properties>
                 <war.bundle>true</war.bundle>
             </properties>
