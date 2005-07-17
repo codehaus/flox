@@ -8,16 +8,8 @@
  */
 package flox.web.tapestry.services;
 
-import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 
@@ -29,41 +21,18 @@ import org.apache.tapestry.engine.IEngineServiceView;
 import org.apache.tapestry.engine.ILink;
 import org.apache.tapestry.request.ResponseOutputStream;
 
-import samples.graph.BasicRenderer;
-
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
-
+import sun.awt.image.ImageFormatException;
 import edu.uci.ics.jung.graph.Edge;
-import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.Vertex;
 import edu.uci.ics.jung.graph.decorators.EdgeStringer;
-import edu.uci.ics.jung.graph.decorators.StringLabeller;
 import edu.uci.ics.jung.graph.decorators.VertexStringer;
-import edu.uci.ics.jung.graph.decorators.StringLabeller.UniqueLabelException;
-import edu.uci.ics.jung.graph.impl.DirectedSparseEdge;
-import edu.uci.ics.jung.graph.impl.DirectedSparseGraph;
-import edu.uci.ics.jung.graph.impl.SimpleDirectedSparseVertex;
-import edu.uci.ics.jung.utils.UserDataContainer;
-import edu.uci.ics.jung.visualization.FRLayout;
-import edu.uci.ics.jung.visualization.GraphDraw;
-import edu.uci.ics.jung.visualization.ISOMLayout;
 import edu.uci.ics.jung.visualization.Layout;
-import edu.uci.ics.jung.visualization.PluggableRenderer;
 import edu.uci.ics.jung.visualization.Renderer;
-import edu.uci.ics.jung.visualization.SpringLayout;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
-import edu.uci.ics.jung.visualization.contrib.CircleLayout;
-import edu.uci.ics.jung.visualization.contrib.KKLayout;
 import flox.NoSuchProcessException;
-import flox.WorkflowEngine;
 import flox.def.Process;
-import flox.def.State;
-import flox.def.Transition;
-import flox.spi.ProcessHandle;
 import flox.spi.ProcessSourceException;
-import flox.visual.FloxLayout;
-import flox.visual.JpegWriter;
+import flox.visual.WorkflowImageWriter;
 import flox.web.tapestry.ProcessProvider;
 
 public class WorkflowImageService extends AbstractService
@@ -89,13 +58,13 @@ public class WorkflowImageService extends AbstractService
         {
             Process process = provider.getProcess();
             
-            JpegWriter jpegWriter = new JpegWriter();
-            jpegWriter.setProcess( process );
-            jpegWriter.setSize( 200, 400 );
+            WorkflowImageWriter imageWriter = new WorkflowImageWriter( WorkflowImageWriter.PNG );
             
-            output.setContentType( "image/jpeg" );
+            imageWriter.setProcess( process );
+            
+            output.setContentType( imageWriter.getMimeType() );
 
-            jpegWriter.write( output );
+            imageWriter.write( output );
             
             output.close();
         }
@@ -104,6 +73,14 @@ public class WorkflowImageService extends AbstractService
             throw new ServletException( e );
         }
         catch ( NoSuchProcessException e )
+        {
+            throw new ServletException( e );
+        }
+        catch ( ImageFormatException e )
+        {
+            throw new ServletException( e );
+        }
+        catch ( IOException e )
         {
             throw new ServletException( e );
         }
