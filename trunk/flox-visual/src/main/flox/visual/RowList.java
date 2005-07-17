@@ -111,4 +111,24 @@ public class RowList
         
         return -1;
     }
+
+    public void dump()
+    {
+        int numRows = rows.size();
+        
+        for ( int i = 0 ; i < numRows ; ++i )
+        {
+            System.err.println( i + ": " + get(i).getVertices() );
+        }
+    }
+
+    public void optimize()
+    {
+        int numRows = rows.size();
+        
+        for ( int i = 0 ; i < numRows ; ++i )
+        {
+            get( i ).optimize();
+        }
+    }
 }

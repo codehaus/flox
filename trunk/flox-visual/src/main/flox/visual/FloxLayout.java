@@ -77,6 +77,7 @@ public class FloxLayout extends AbstractLayout
                     if ( ! seenVertices.contains( destVertex ) )
                     {
                         rowList.add( curRow+1, destVertex );
+                        seenVertices.add( destVertex );
                     }
                 }
                 
@@ -85,6 +86,9 @@ public class FloxLayout extends AbstractLayout
             
             ++curRow;
         }
+        
+        //rowList.dump();
+        rowList.optimize();
     }
 
     @Override
@@ -111,6 +115,10 @@ public class FloxLayout extends AbstractLayout
         
         x = x + ( widthPx / 2 ) - ( ( rowWidth - 1 ) * ( columnWidthPx / 2 ) );
         
+        State state = (State) vertex.getUserDatum( STATE );
+        
+        System.err.println( "row: " + row + " / state " + state.getName() + " / row width " + rowWidth + " / x " + x );
+        
         coords.setX( x );
         coords.setY( y );
         
@@ -129,12 +137,6 @@ public class FloxLayout extends AbstractLayout
     
     public Coordinates getCoordinates(Vertex vertex)
     {
-        State state = (State) vertex.getUserDatum( STATE );
-        Coordinates coords = (Coordinates) vertex.getUserDatum( COORDS );
-        
-        System.err.println( "State: " + state );
-        System.err.println( "Coordinates: " + state );
-        
         return (Coordinates) vertex.getUserDatum( COORDS );
     }
 

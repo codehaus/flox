@@ -63,6 +63,7 @@ import flox.def.Transition;
 import flox.spi.ProcessHandle;
 import flox.spi.ProcessSourceException;
 import flox.visual.FloxLayout;
+import flox.visual.JpegWriter;
 import flox.web.tapestry.ProcessProvider;
 
 public class WorkflowImageService extends AbstractService
@@ -87,85 +88,14 @@ public class WorkflowImageService extends AbstractService
         try
         {
             Process process = provider.getProcess();
-
-            List<State> states = process.getStates();
-
-            Graph graph = new DirectedSparseGraph();
-
-            Map<State, Vertex> vertexIndex = new HashMap<State, Vertex>();
-
-            for ( State state : states )
-            {
-                SimpleDirectedSparseVertex vertex = new SimpleDirectedSparseVertex();
-                
-                vertex.setUserDatum( "name", state.getName(), new UserDataContainer.CopyAction.Shared() );
-                vertex.setUserDatum( FloxLayout.STATE, state, new UserDataContainer.CopyAction.Shared() );
-                graph.addVertex( vertex );
-                vertexIndex.put( state, vertex );
-            }
-
-            for ( State state : states )
-            {
-                Vertex vertex = vertexIndex.get( state );
-
-                for ( Transition transition : state.getTransitions() )
-                {
-                    State destState = transition.getDestination();
-                    Vertex destVertex = vertexIndex.get( destState );
-
-                    DirectedSparseEdge edge = new DirectedSparseEdge( vertex, destVertex );
-                    edge.setUserDatum( "name", transition.getName(), new UserDataContainer.CopyAction.Shared() );
-                    graph.addEdge( edge );
-                }
-            }
             
-            graph.setUserDatum( FloxLayout.PROCESS, process, new UserDataContainer.CopyAction.Shared() );
-       
-            Dimension vd = new Dimension( 400, 400 );
-            
-            //CircleLayout layout = new CircleLayout( graph );
-            FloxLayout layout = new FloxLayout( graph );
-            
-            layout.initialize( vd );
-            
-            PluggableRenderer renderer = new PluggableRenderer(); 
-            
-            renderer.setVertexStringer( new FloxStringer() );
-            //renderer.setEdgeStringer( new FloxStringer() );
-            
-            MyVV viewer = new MyVV( layout, renderer );
-            
-            viewer.setBackground( Color.white );
-            viewer.setForeground( Color.black );
-            
-            //viewer.setPreferredSize( vd );
-            //viewer.resize( vd );
-            viewer.resize( vd );
-            
-            //layout.update();
-            
-            for ( int i = 0 ; i < 100 ; ++i )
-            {
-                layout.advancePositions();
-            }
-            
-            
-            Dimension ld = layout.getCurrentSize();
-            viewer.setScale( (float) vd.width/ld.width, (float) vd.height/ld.height );
-            
-            BufferedImage image = new BufferedImage( vd.width, vd.height, BufferedImage.TYPE_INT_RGB );
-
-            Graphics2D g2 = image.createGraphics();
-            g2.setBackground( Color.white );
-            g2.setColor( Color.black );
-            
-            viewer.paintComponent( g2 );
+            JpegWriter jpegWriter = new JpegWriter();
+            jpegWriter.setProcess( process );
+            jpegWriter.setSize( 300, 600 );
             
             output.setContentType( "image/jpeg" );
 
-            JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder( output );
-            encoder.setJPEGEncodeParam( encoder.getDefaultJPEGEncodeParam( image ) );
-            encoder.encode( image );
+            jpegWriter.write( output );
             
             output.close();
         }
