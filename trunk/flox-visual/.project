@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <projectDescription>
-  <name>flox-web</name>
+  <name>flox-visual</name>
   <comment>
   </comment>
   <projects>
     <project>flox-engine</project>
-    <project>flox-visual</project>
   </projects>
   <buildSpec>
     <buildCommand>

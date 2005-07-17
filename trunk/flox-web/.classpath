@@ -7,6 +7,8 @@
   </classpathentry>
   <classpathentry kind="src" path="/flox-engine">
   </classpathentry>
+  <classpathentry kind="src" path="/flox-visual">
+  </classpathentry>
   <classpathentry kind="var" path="MAVEN_REPO/antlr/jars/antlr-2.7.2.jar">
   </classpathentry>
   <classpathentry kind="var" path="MAVEN_REPO/xtile/jars/xtile-0.5.jar">
