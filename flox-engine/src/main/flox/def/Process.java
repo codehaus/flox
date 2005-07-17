@@ -1,11 +1,8 @@
 package flox.def;
 
-import flox.spi.ProcessHandle;
+import flox.Workflow;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,33 +12,33 @@ import java.util.Map;
  * Time: 10:52:33 PM
  * To change this template use File | Settings | File Templates.
  */
-public class Process implements Serializable
+public class Process
 {
-    private static final long serialVersionUID = 3257006549032841264L;
-    
-    private ProcessHandle processHandle;
-    private Map<String,State> states;
-    private List<State> orderedStates;
+    private String name;
+    private Map states;
+    private State startState;
 
-    public Process()
+    public Process(String name)
     {
-        this.states = new HashMap<String,State>();
-        this.orderedStates = new ArrayList<State>();
+        this.name = name;
+        this.states = new HashMap();
     }
-    
-    public ProcessHandle getProcessHandle()
+
+    public String getName()
     {
-        return processHandle;
+        return name;
     }
-    
-    public void setProcessHandle(ProcessHandle processHandle)
+
+    public void setStartState(String name) throws NoSuchStateException
     {
-        this.processHandle = processHandle;
+        State state = getState( name );
+
+        this.startState = state;
     }
 
     public State getStartState()
     {
-        return this.orderedStates.get( 0 );
+        return startState;
     }
 
     public State newState(String name)
@@ -58,8 +55,11 @@ public class Process implements Serializable
         
         this.states.put( name,
                          state );
-        
-        this.orderedStates.add( state );
+
+        if ( this.startState == null )
+        {
+            this.startState = state;
+        }
 
         return state;
     }
@@ -76,10 +76,5 @@ public class Process implements Serializable
         }
 
         return state;
-    }
-    
-    public List<State> getStates()
-    {
-        return this.orderedStates;
     }
 }

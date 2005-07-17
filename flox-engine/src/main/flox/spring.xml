@@ -2,6 +2,7 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
         "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans>
-    <import resource="test-spring-dao.xml"/>
-    <import resource="test-spring-om.xml"/>
+    <import resource="spring-db.xml"/>
+    <import resource="spring-dao.xml"/>
+    <import resource="spring-om.xml"/>
 </beans>

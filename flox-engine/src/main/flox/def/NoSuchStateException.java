@@ -10,10 +10,6 @@ package flox.def;
 public class NoSuchStateException
         extends DefinitionException
 {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 3257286920185788723L;
     private Process process;
     private String name;
 
@@ -46,6 +42,6 @@ public class NoSuchStateException
 
     public String getMessage()
     {
-        return "No such state '" + getName() + "'";
+        return "No such state '" + getName() + "' in process '" + getProcess().getName() + "'";
     }
 }

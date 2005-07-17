@@ -1,7 +1,5 @@
 package flox.def;
 
-import java.io.Serializable;
-
 import flox.spi.Predicate;
 import flox.spi.Action;
 
@@ -12,10 +10,8 @@ import flox.spi.Action;
  * Time: 10:52:51 PM
  * To change this template use File | Settings | File Templates.
  */
-public class Transition implements Serializable
+public class Transition
 {
-    private static final long serialVersionUID = 4122536591940989748L;
-    
     private String name;
     private State origin;
     private State destination;

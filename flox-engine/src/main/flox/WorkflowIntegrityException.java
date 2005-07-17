@@ -1,5 +1,6 @@
 package flox;
 
+import flox.def.DefinitionException;
 
 /**
  * Created by IntelliJ IDEA.
@@ -11,8 +12,6 @@ package flox;
 public class WorkflowIntegrityException
         extends RuntimeFloxException
 {
-    private static final long serialVersionUID = 3832623971605557559L;
-    
     private Workflow workflow;
 
     public WorkflowIntegrityException(Workflow workflow,

@@ -2,6 +2,7 @@ package flox.spi;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 import flox.def.TriggerDefinition;
 
 /**

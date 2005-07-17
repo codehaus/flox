@@ -45,11 +45,11 @@ public class ProcessReaderHandler
     private Process process;
     private StringBuffer characters;
     private Locator locator;
-    private Map<String,WeakState> states;
-    private List<WeakState> orderedStates;
+    private Map states;
     private WeakState currentState;
     private WeakTransition currentTransition;
     private ActionOwner currentActionOwner;
+    private WeakState firstState;
 
     public ProcessReaderHandler(List<ActionHandlerFactory> actionHandlerFactories,
                                 List<TriggerDefinitionHandlerFactory> triggerDefinitionHandlerFactories)
@@ -85,6 +85,12 @@ public class ProcessReaderHandler
                              Attributes attrs) throws SAXException
     {
         this.characters = new StringBuffer();
+        //System.err.println( "parseState: " + this.parseState );
+        //System.err.println( "parseState & ROOT: " + ( this.parseState & ROOT ) );
+        //System.err.println( "parseState & PROCESS: " + ( this.parseState & PROCESS ) );
+        //System.err.println( "parseState & STATE: " + ( this.parseState & STATE ) );
+        //System.err.println( "parseState & TRANSITION: " + ( this.parseState & TRANSITION ) );
+        //System.err.println( "parseState & ACTION: " + ( this.parseState & ACTION ) );
 
         if ( ( this.parseState & ROOT ) != 0 )
         {
@@ -222,7 +228,7 @@ public class ProcessReaderHandler
             else
             {
                 TriggerDefinitionHandlerFactory triggerHandlerFactory = getTriggerDefinitionHandlerFactory( uri, localName );
-                
+
                 if ( triggerHandlerFactory != null )
                 {
                     if ( this.currentTransition.getTriggerDefinition() != null )
@@ -310,9 +316,19 @@ public class ProcessReaderHandler
 
     public void startProcess(Attributes attrs) throws SAXException
     {
-        this.process = new Process();
-        this.states = new HashMap<String,WeakState>();
-        this.orderedStates = new ArrayList<WeakState>();
+        //System.err.println( "startProcess" );
+        String name = attrs.getValue( "", "name" );
+
+        if ( name == null )
+        {
+            throw new SAXParseException( "attribute 'name' required on <process>",
+                                         this.locator );
+        }
+
+        name = name.trim();
+
+        this.process = new Process( name );
+        this.states = new HashMap();
 
         this.parseState = PROCESS;
 
@@ -320,8 +336,13 @@ public class ProcessReaderHandler
 
     public void endProcess() throws SAXException
     {
-        for ( WeakState weakState : this.orderedStates )
+        //System.err.println( "endProcess" );
+        Collection states = this.states.values();
+
+        for ( Iterator stateIter = states.iterator(); stateIter.hasNext(); )
         {
+            WeakState weakState = (WeakState) stateIter.next();
+
             try
             {
                 State state = this.process.newState( weakState.getName() );
@@ -336,12 +357,28 @@ public class ProcessReaderHandler
             }
         }
 
-        for ( WeakState weakState : this.orderedStates )
+        try
         {
-            List<WeakTransition> transitions = weakState.getTransitions();
+            this.process.setStartState( this.firstState.getName() );
+        }
+        catch (NoSuchStateException e)
+        {
+            throw new SAXParseException( e.getMessage(),
+                                         this.firstState.getDocumentLocator(),
+                                         e );
+        }
 
-            for ( WeakTransition weakTransition : transitions )
+
+        for ( Iterator stateIter = states.iterator(); stateIter.hasNext(); )
+        {
+            WeakState weakState = (WeakState) stateIter.next();
+
+            List transitions = weakState.getTransitions();
+
+            for ( Iterator transIter = transitions.iterator(); transIter.hasNext(); )
             {
+                WeakTransition weakTransition = (WeakTransition) transIter.next();
+
                 try
                 {
                     State origin = this.process.getState( weakState.getName() );
@@ -379,6 +416,7 @@ public class ProcessReaderHandler
 
     public void startState(Attributes attrs) throws SAXException
     {
+        //System.err.println( "startState" );
         String name = attrs.getValue( "", "name" );
 
         if ( name == null )
@@ -400,17 +438,21 @@ public class ProcessReaderHandler
 
         this.states.put( state.getName(),
                          state );
-        
-        this.orderedStates.add( state );
 
         this.currentState = state;
         this.currentActionOwner = state;
+
+        if ( this.firstState == null )
+        {
+            this.firstState = state;
+        }
 
         this.parseState = STATE;
     }
 
     public void endState() throws SAXException
     {
+        //System.err.println( "endState" );
         this.currentState = null;
         this.currentActionOwner = null;
         this.parseState = PROCESS;
@@ -419,6 +461,7 @@ public class ProcessReaderHandler
     public void startAction(ActionHandler handler,
                             Attributes attrs) throws SAXException
     {
+        //System.err.println( "startAction" );
         this.actionHandler = handler;
         this.actionHandler.setDocumentLocator( this.locator );
         this.actionHandler.startAction( attrs );
@@ -428,6 +471,7 @@ public class ProcessReaderHandler
 
     public void endAction() throws SAXException
     {
+        //System.err.println( "endAction" );
         this.actionHandler.endAction();
         this.delegationDepth = 0;
 
@@ -555,6 +599,7 @@ public class ProcessReaderHandler
 
     public void startTransition(Attributes attrs) throws SAXException
     {
+        //System.err.println( "startTransition" );
         String name = attrs.getValue( "", "name" );
         String to   = attrs.getValue( "", "to" );
 
@@ -570,8 +615,10 @@ public class ProcessReaderHandler
                                          this.locator );
         }
 
-        for ( WeakTransition weakTransition : this.currentState.getTransitions() )
+        for ( Iterator transIter = this.currentState.getTransitions().iterator(); transIter.hasNext(); )
         {
+            WeakTransition weakTransition = (WeakTransition) transIter.next();
+
             if ( weakTransition.getName().equals( name ) )
             {
                 throw new SAXParseException( "duplicate transition '" + name + "' for state '" + this.currentState.getName() + "'",
@@ -594,6 +641,7 @@ public class ProcessReaderHandler
 
     public void endTransition() throws SAXException
     {
+        //System.err.println( "endTransition" );
         this.currentTransition = null;
         this.currentActionOwner = null;
         this.parseState = STATE;

@@ -10,8 +10,6 @@ package flox.def;
 public class AutomaticTriggerDefinition
         extends TriggerDefinition
 {
-    private static final long serialVersionUID = 3258410633937564472L;
-    
     private long checkInterval;
 
     public AutomaticTriggerDefinition()

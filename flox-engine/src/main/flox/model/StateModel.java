@@ -1,6 +1,5 @@
 package flox.model;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -10,10 +9,8 @@ import java.util.Date;
  * Time: 10:00:17 AM
  * To change this template use File | Settings | File Templates.
  */
-public class StateModel implements Serializable
+public class StateModel
 {
-    private static final long serialVersionUID = 3258134643651130425L;
-    
     private Long id;
     private WorkflowModel workflow;
     private String name;
@@ -68,18 +65,9 @@ public class StateModel implements Serializable
     {
         return exitedDate;
     }
-    
+
     public void setExitedDate(Date exitedDate)
     {
         this.exitedDate = exitedDate;
     }
-
-    public String toString()
-    {
-        return "[State: id=" + this.id + 
-            "; name=" + this.name +
-            "; enteredDate=" + this.enteredDate +
-            "; exitedDate=" + this.exitedDate + "]";
-    }
-
 }

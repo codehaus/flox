@@ -11,10 +11,10 @@
             <value>jdbc:postgresql://localhost:5432/flox</value>
         </property>
         <property name="username">
-            <value>flox_dbo</value>
+            <value>postgres</value>
         </property>
         <property name="password">
-            <value>flox_dbo</value>
+            <value></value>
         </property>
         <property name="validationQuery">
             <value>SELECT NOW()</value>
@@ -23,7 +23,7 @@
 
 
     <bean id="sessionFactory"
-        class="org.springframework.orm.hibernate3.LocalSessionFactoryBean" singleton="true">
+        class="org.springframework.orm.hibernate.LocalSessionFactoryBean" singleton="true">
         <property name="schemaUpdate">
             <value>true</value>
         </property>
@@ -36,11 +36,12 @@
                     <value>getMappings</value>
                 </property>
             </bean>
+
         </property>
         <property name="hibernateProperties">
             <props>
-                <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
-                <prop key="hibernate.show_sql">false</prop>
+                <prop key="hibernate.dialect">net.sf.hibernate.dialect.PostgreSQLDialect</prop>
+                <prop key="hibernate.show_sql">true</prop>
             </props>
         </property>
         <property name="dataSource">
@@ -50,7 +51,7 @@
 
 
     <bean id="transactionManager"
-        class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        class="org.springframework.orm.hibernate.HibernateTransactionManager">
         <property name="sessionFactory">
             <ref local="sessionFactory"/>
         </property>

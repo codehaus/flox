@@ -1,12 +1,16 @@
 package flox.model;
 
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+import flox.FloxTestCase;
+
 import java.util.Date;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Expression;
+import net.sf.hibernate.Criteria;
+import net.sf.hibernate.Session;
+import net.sf.hibernate.expression.Criterion;
+import net.sf.hibernate.expression.Expression;
 
 public class WorkflowModelDaoImplTest 
         extends DaoTestCase
@@ -40,7 +44,7 @@ public class WorkflowModelDaoImplTest
     public void testSave() throws Exception
     {
         WorkflowModel workflow = new WorkflowModel();
-        workflow.setProcessHandle( "test process" );
+        workflow.setProcessName( "test process" );
 
         WorkflowModelDao workflowDao = (WorkflowModelDao) getBean( "workflowModelDao" );
 
@@ -55,8 +59,8 @@ public class WorkflowModelDaoImplTest
                       fetchedWorkflow.getId() );
 
         assertEquals( "same process",
-                      workflow.getProcessHandle(),
-                      fetchedWorkflow.getProcessHandle() );
+                      workflow.getProcessName(),
+                      fetchedWorkflow.getProcessName() );
     }
 
     public void testGetByFlowedObjectCriteria() throws Exception
@@ -70,7 +74,7 @@ public class WorkflowModelDaoImplTest
         projectDao.save( project );
 
         WorkflowModel workflow = new WorkflowModel();
-        workflow.setProcessHandle( "test process" );
+        workflow.setProcessName( "test process" );
         workflow.setFlowedObject( project );
 
         WorkflowModelDao workflowDao = (WorkflowModelDao) getBean( "workflowModelDao" );

@@ -2,7 +2,6 @@ package flox.def;
 
 import flox.spi.Action;
 
-import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -12,22 +11,18 @@ import java.util.*;
  * Time: 10:52:44 PM
  * To change this template use File | Settings | File Templates.
  */
-public class State implements Serializable
+public class State
 {
-    private static final long serialVersionUID = 3257291344035721272L;
-
     private Process process;
-
     private String name;
-
     private List<Transition> transitions;
-
     private Action action;
 
-    protected State( Process process, String name )
+    protected State(Process process,
+                    String name)
     {
-        this.process = process;
-        this.name = name;
+        this.process     = process;
+        this.name        = name;
         this.transitions = new ArrayList<Transition>();
     }
 
@@ -40,9 +35,10 @@ public class State implements Serializable
     {
         return name;
     }
-
-    public Transition addTransition( String name, State destination ) throws DuplicateTransitionException,
-            ProcessMismatchException
+    
+    public Transition addTransition(String name,
+                                    State destination)
+        throws DuplicateTransitionException, ProcessMismatchException
     {
         for ( Iterator<Transition> transitionIter = transitions.iterator(); transitionIter.hasNext(); )
         {
@@ -50,16 +46,22 @@ public class State implements Serializable
 
             if ( transition.getName().equals( name ) )
             {
-                throw new DuplicateTransitionException( this, name, destination );
+                throw new DuplicateTransitionException( this,
+                                                        name,
+                                                        destination );
             }
         }
 
+
         if ( destination.getProcess() != getProcess() )
         {
-            throw new ProcessMismatchException( this, destination );
+            throw new ProcessMismatchException( this,
+                                                destination );
         }
 
-        Transition transition = new Transition( name, this, destination );
+        Transition transition = new Transition( name,
+                                                this,
+                                                destination );
 
         this.transitions.add( transition );
 
@@ -71,32 +73,14 @@ public class State implements Serializable
         return Collections.unmodifiableList( this.transitions );
     }
 
-    public Transition getTransition( String name )
-    {
-        for ( Transition transition : transitions )
-        {
-            if ( transition.getName().equals( name ) )
-            {
-                return transition;
-            }
-        }
-
-        return null;
-    }
-
     public Action getAction()
     {
         return action;
     }
 
-    public void setAction( Action action )
+    public void setAction(Action action)
     {
         this.action = action;
-    }
-
-    public String toString()
-    {
-        return getClass().getName() + "[name=" + getName() + "]";
     }
 
 }

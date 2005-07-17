@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC
-	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
 
 <hibernate-mapping>
 
@@ -13,14 +13,12 @@
             </generator>
         </id>
 
-        <property name="processHandle" type="string"/>
+        <property name="processName" type="string"/>
 
         <any id-type="long" name="flowedObject">
             <column name="flowedObjectClass"/>
             <column name="flowedObjectId"/>
         </any>
-		
-		<many-to-one name="currentState" class="flox.model.StateModel"/>
 
     </class>
 

@@ -1,7 +1,5 @@
 package flox.model;
 
-import java.io.Serializable;
-
 /**
  * Created by IntelliJ IDEA.
  * User: bob
@@ -9,22 +7,14 @@ import java.io.Serializable;
  * Time: 12:24:20 AM
  * To change this template use File | Settings | File Templates.
  */
-public class WorkflowModel implements Serializable
+public class WorkflowModel
 {
-    private static final long serialVersionUID = 4050198622488441913L;
-    
     private Long id;
-    private String processHandle;
+    private String processName;
     private Object flowedObject;
-    private StateModel currentState;
 
     public WorkflowModel()
     {
-    }
-    
-    public WorkflowModel(Object flowedObject)
-    {
-        setFlowedObject( flowedObject );
     }
 
     public Long getId()
@@ -37,14 +27,14 @@ public class WorkflowModel implements Serializable
         this.id = id;
     }
 
-    public String getProcessHandle()
+    public String getProcessName()
     {
-        return processHandle;
+        return processName;
     }
 
-    public void setProcessHandle(String processName)
+    public void setProcessName(String processName)
     {
-        this.processHandle = processName;
+        this.processName = processName;
     }
 
     public Object getFlowedObject()
@@ -55,22 +45,5 @@ public class WorkflowModel implements Serializable
     public void setFlowedObject(Object flowedObject)
     {
         this.flowedObject = flowedObject;
-    }
-    
-    public StateModel getCurrentState()
-    {
-        return this.currentState;
-    }
-    
-    public void setCurrentState(StateModel currentState)
-    {
-        this.currentState = currentState;
-    }
-    
-    public String toString()
-    {
-        return "[WorkflowModel: id=" + this.id +
-            "; processName=" + this.processHandle +
-            "; flowedObject=" + this.flowedObject + "]";
     }
 }

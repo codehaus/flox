@@ -1,6 +1,6 @@
 package flox.model;
 
-import org.hibernate.Criteria;
+import net.sf.hibernate.Criteria;
 
 /**
  * Created by IntelliJ IDEA.
@@ -12,8 +12,6 @@ import org.hibernate.Criteria;
 public class NoSuchModelObjectException
         extends ModelException
 {
-    private static final long serialVersionUID = 3976741350182237239L;
-    
     private Class dataClass;
     private Criteria criteria;
 

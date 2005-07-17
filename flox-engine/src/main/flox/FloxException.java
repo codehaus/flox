@@ -10,8 +10,6 @@ package flox;
 public class FloxException
         extends Exception
 {
-    private static final long serialVersionUID = 3257846571704791095L;
-
     public FloxException()
     {
     }
@@ -19,10 +17,5 @@ public class FloxException
     public FloxException(Throwable cause)
     {
         super( cause );
-    }
-    
-    public FloxException(String message)
-    {
-        super( message );
     }
 }

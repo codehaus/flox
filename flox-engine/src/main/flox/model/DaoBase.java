@@ -1,13 +1,14 @@
 package flox.model;
 
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
-import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
-import org.hibernate.criterion.Expression;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Order;
+import org.springframework.orm.hibernate.support.HibernateDaoSupport;
+import org.springframework.orm.hibernate.SessionFactoryUtils;
+import net.sf.hibernate.Criteria;
+import net.sf.hibernate.Session;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.expression.Expression;
+import net.sf.hibernate.expression.Criterion;
+import net.sf.hibernate.expression.Order;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -18,7 +19,8 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class DaoBase
-        extends HibernateDaoSupport 
+        extends HibernateDaoSupport
+
 {
     public DaoBase()
     {
@@ -49,8 +51,8 @@ public class DaoBase
 
         try
         {
-            List<?> results = criteria.list();
-            
+            List results = criteria.list();
+
             if ( results.isEmpty() )
             {
                 throw new NoSuchModelObjectException( t,
@@ -97,7 +99,7 @@ public class DaoBase
 
         try
         {
-            List<?> results = criteria.list();
+            List results = criteria.list();
 
             if ( results.isEmpty() )
             {
@@ -131,28 +133,5 @@ public class DaoBase
     protected Criteria createCriteria(Class dataClass)
     {
         return getSession().createCriteria( dataClass );
-    }
-
-    public Iterator getCurrentPageRows(Class t, int first, int pageSize, String sortColumn, boolean sortOrder, Criteria criteria)
-    {
-        if ( criteria == null )
-        {
-            criteria = createCriteria( t );
-        }
-        
-        criteria.setFetchSize( pageSize );
-        criteria.setMaxResults( pageSize );
-        criteria.setFirstResult( first );
-        
-        return criteria.list().iterator();
-    }
-    
-    public int countAll(Class t, Criteria criteria)
-    {
-        if ( criteria == null )
-        {
-            criteria = createCriteria( t );
-        }
-        return criteria.list().size();
     }
 }

@@ -3,7 +3,7 @@
         "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans>
 
-    <bean id="workflowEngineTarget"
+    <bean id="test.workflowEngineTarget"
         class="flox.DefaultWorkflowEngine">
         <property name="workflowModelDao">
             <ref bean="workflowModelDao"/>
@@ -11,16 +11,9 @@
         <property name="stateModelDao">
             <ref bean="stateModelDao"/>
         </property>
-		<property name="processSource">
-			<bean class="flox.sources.classpath.ClassPathProcessSource">
-				<property name="processReader">
-					<ref bean="processReader"/>
-				</property>
-			</bean>
-		</property>
     </bean>
 
-    <bean id="workflowEngine" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+    <bean id="test.workflowEngine" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
         <property name="transactionManager">
             <ref bean="transactionManager"/>
         </property>
@@ -35,7 +28,7 @@
         </property>
     </bean>
 
-    <bean id="processReader" class="flox.io.ProcessReader">
+    <bean id="test.processReader" class="flox.io.ProcessReader">
         <property name="actionHandlerFactories">
             <list>
                 <bean class="flox.spi.SimpleActionHandlerFactory">

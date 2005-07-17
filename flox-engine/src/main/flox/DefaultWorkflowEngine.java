@@ -1,44 +1,38 @@
 package flox;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
-import org.hibernate.criterion.Criterion;
-
-import flox.def.AutomaticTriggerDefinition;
-import flox.def.ManualTriggerDefinition;
-import flox.def.NoSuchStateException;
+import flox.def.*;
 import flox.def.Process;
-import flox.def.State;
-import flox.def.Transition;
-import flox.def.TriggerDefinition;
-import flox.model.NoSuchModelObjectException;
-import flox.model.StateModel;
-import flox.model.StateModelDao;
-import flox.model.WorkflowModel;
-import flox.model.WorkflowModelDao;
-import flox.spi.Action;
+import flox.model.*;
 import flox.spi.ManualTriggerEvaluator;
+import flox.spi.Action;
 import flox.spi.Predicate;
-import flox.spi.ProcessHandle;
-import flox.spi.ProcessSource;
-import flox.spi.ProcessSourceException;
 
-public class DefaultWorkflowEngine implements WorkflowEngine
+import java.util.*;
+
+import net.sf.hibernate.Criteria;
+import net.sf.hibernate.expression.Criterion;
+import org.springframework.beans.factory.InitializingBean;
+
+/**
+ * Created by IntelliJ IDEA.
+ * User: bob
+ * Date: Mar 15, 2005
+ * Time: 11:41:30 PM
+ * To change this template use File | Settings | File Templates.
+ */
+public class DefaultWorkflowEngine
+        implements InitializingBean, WorkflowEngine
 {
     private WorkflowModelDao workflowModelDao;
     private StateModelDao stateModelDao;
-    
-    private ProcessSource processSource;
-    
+    private ProcessLoader processLoader;
+    private Map processes;
+
     private ManualTriggerEvaluator manualTriggerEvaluator;
 
     public DefaultWorkflowEngine()
     {
+        this.processes = new HashMap();     
     }
 
     public WorkflowModelDao getWorkflowModelDao()
@@ -71,58 +65,57 @@ public class DefaultWorkflowEngine implements WorkflowEngine
         this.manualTriggerEvaluator = manualTriggerEvaluator;
     }
 
-    public ProcessSource getProcessSource()
+    public ProcessLoader getProcessLoader()
     {
-        return processSource;
+        return processLoader;
     }
 
-    public void setProcessSource(ProcessSource processSource)
+    public void setProcessLoader(ProcessLoader processLoader)
     {
-        this.processSource = processSource;
+        this.processLoader = processLoader;
     }
-    
-    public Process getProcess(ProcessHandle handle)
-        throws ProcessSourceException, NoSuchProcessException
+
+    public void addProcess(Process process)
+        throws DuplicateProcessException
     {
-        Process process = getProcessSource().getProcess( handle );
-        
+        if ( this.processes.containsKey( process.getName() ) )
+        {
+            throw new DuplicateProcessException( this,
+                                                 process ); 
+        }
+
+        this.processes.put( process.getName(),
+                            process );
+    }
+
+    Process getProcess(String name)
+        throws NoSuchProcessException
+    {
+        Process process = (Process) this.processes.get( name );
+
         if ( process == null )
         {
-            throw new NoSuchProcessException( this, handle.getHandle() );
+            throw new NoSuchProcessException( this,
+                                              name );
         }
-        
+
         return process;
     }
 
-    public Process getProcess(Object context, String name)
-        throws ProcessSourceException, NoSuchProcessException
+    public Collection getProcessNames()
     {
-        Process process = getProcessSource().getProcess( context, name );
-
-        if ( process == null )
-        {
-            throw new NoSuchProcessException( this, name );
-        }
-        
-        return process;
+        return this.processes.keySet();
     }
 
-    public Workflow newWorkflow(Object context, String processName)
-        throws ProcessSourceException, NoSuchProcessException
+    public Workflow newWorkflow(String processName)
+        throws NoSuchProcessException
     {
-        return newWorkflow( context, processName, null );
-    }
-    
-    public Workflow newWorkflow(Object context, String processName, Object flowedObject)
-        throws ProcessSourceException, NoSuchProcessException
-    {
-        Process process = getProcess( context, processName );
+        Process process = getProcess( processName );
 
-        WorkflowModel workflowModel = new WorkflowModel( flowedObject );
-        
-        workflowModel.setProcessHandle( process.getProcessHandle().getHandle() );
+        WorkflowModel workflowModel = new WorkflowModel();
+
         getWorkflowModelDao().save( workflowModel );
-    
+
         Workflow workflow = new Workflow( this,
                                           process,
                                           workflowModel );
@@ -137,23 +130,8 @@ public class DefaultWorkflowEngine implements WorkflowEngine
         return workflow;
     }
     
-    public boolean attemptManualTransition(Long workflowId, String transitionName) 
-        throws ProcessSourceException, NoSuchModelObjectException, NoSuchProcessException, TransitionNotManualException
-    {
-        Workflow workflow = getWorkflow( workflowId );
-        
-        Process process = workflow.getProcess();
-        
-        State state = workflow.getCurrentState();
-        
-        Transition transition = state.getTransition( transitionName );
-        
-        return attemptManualTransition( workflow,
-                                        transition );
-    }
-    
-    public boolean attemptManualTransition(Workflow workflow, Transition transition) 
-        throws TransitionNotManualException
+    public boolean attemptManualTransition(Workflow workflow,
+                                           Transition transition) throws TransitionNotManualException
     {
         if ( ! ( transition.getTriggerDefinition() instanceof ManualTriggerDefinition )  )
         {
@@ -201,10 +179,7 @@ public class DefaultWorkflowEngine implements WorkflowEngine
         stateModel.setWorkflow( workflow.getModel() );
 
         getStateModelDao().save( stateModel );
-        
-        workflow.getModel().setCurrentState( stateModel );
-        
-        getWorkflowModelDao().save( workflow.getModel() );
+
         Action action = state.getAction();
 
         if ( action != null )
@@ -227,7 +202,8 @@ public class DefaultWorkflowEngine implements WorkflowEngine
         }
     }
     
-    private void exitState(Date now, Workflow workflow)
+    private void exitState(Date now,
+                           Workflow workflow)
     {
         try
         {
@@ -258,7 +234,7 @@ public class DefaultWorkflowEngine implements WorkflowEngine
             Transition transition = transIter.next();
 
             TriggerDefinition triggerDef = transition.getTriggerDefinition();
-            
+
             if ( triggerDef == null || triggerDef instanceof AutomaticTriggerDefinition )
             {
                 boolean result = attemptTransition( workflow,
@@ -274,7 +250,8 @@ public class DefaultWorkflowEngine implements WorkflowEngine
         return false;
     }
     
-    private boolean attemptTransition(Workflow workflow, Transition transition)
+    private boolean attemptTransition(Workflow workflow,
+                                      Transition transition)
     {
         State state = workflow.getCurrentState();
         List<Transition> transitions = state.getTransitions();
@@ -302,7 +279,8 @@ public class DefaultWorkflowEngine implements WorkflowEngine
         return false;
     }
     
-    private void followTransition(Workflow workflow, Transition transition)
+    private void followTransition(Workflow workflow,
+                                  Transition transition)
     {
         Date now = new Date();
 
@@ -310,7 +288,7 @@ public class DefaultWorkflowEngine implements WorkflowEngine
                    workflow );
 
         Action action = transition.getAction();
-        
+
         if ( action != null )
         {
             try
@@ -329,10 +307,12 @@ public class DefaultWorkflowEngine implements WorkflowEngine
                     transition.getDestination() );
     }
 
-    public Workflow getWorkflow(Object context, String processName, Class flowedObjectClass, Criterion flowedObjectCriterion)
-            throws ProcessSourceException, NoSuchProcessException, NoSuchModelObjectException
+    public Workflow getWorkflow(String processName,
+                                Class flowedObjectClass,
+                                Criterion flowedObjectCriterion)
+            throws NoSuchProcessException, NoSuchModelObjectException
     {
-        Process process = getProcess( context, processName );
+        Process process = getProcess( processName );
 
         WorkflowModel workflowModel = getWorkflowModelDao().get( processName,
                                                                  flowedObjectClass,
@@ -344,72 +324,15 @@ public class DefaultWorkflowEngine implements WorkflowEngine
 
         return workflow;
     }
-    
-    public Workflow getWorkflow(Object context, String processName, Object flowedObject) 
-        throws ProcessSourceException, NoSuchProcessException, NoSuchModelObjectException
+
+    public List getWorkflows(String processName) throws NoSuchProcessException
     {
-        Process process = getProcess( context, processName );
-        
-        WorkflowModel workflowModel = getWorkflowModelDao().get( process, flowedObject );
-        
-        Workflow workflow = new Workflow( this, process, workflowModel );
-        
-        return workflow;
-    }
-    
-    
-    public Workflow getWorkflow(Long id) 
-        throws ProcessSourceException, NoSuchModelObjectException, NoSuchProcessException
-    {
-        WorkflowModel wfModel = getWorkflowModelDao().get( id );
-        
-        ProcessHandle handle = new ProcessHandle( wfModel.getProcessHandle() );
-        
-        Process process = getProcess( handle );
-        
-        return new Workflow( this, process, wfModel );
+        Process process = getProcess( processName );
+
+        return getWorkflowModelDao().getAll( processName );
     }
 
-    public List<Workflow> getWorkflows(Object context, String processName) 
-        throws ProcessSourceException, NoSuchProcessException
-    {
-        Process process = getProcess( context, processName );
-
-        List<WorkflowModel> models = getWorkflowModelDao().getAll( process );
-        
-        List<Workflow> flows = new ArrayList<Workflow>( models.size() );
-        
-        for ( WorkflowModel model : models )
-        {
-            Workflow flow = new Workflow( this, process, model );
-            flows.add( flow );
-        }
-        
-        return flows;
-    }
-    
-    public List<Workflow> getWorkflows(Object context, String processName, String currentStateName) 
-        throws ProcessSourceException, NoSuchProcessException, NoSuchStateException
-    {
-        Process process = getProcess( context, processName );
-        
-        State currentState = process.getState( currentStateName );
-        
-        List<WorkflowModel> models = getWorkflowModelDao().getAll( process, currentState );
-        
-        List<Workflow> flows = new ArrayList<Workflow>( models.size() );
-        
-        for ( WorkflowModel model : models )
-        {
-            Workflow flow = new Workflow( this, process, model );
-            
-            flows.add( flow );
-        }
-        
-        return flows;
-    }
-
-    public State getCurrentState(Workflow workflow)
+    State getCurrentState(Workflow workflow)
     {
         try
         {
@@ -430,16 +353,11 @@ public class DefaultWorkflowEngine implements WorkflowEngine
         }
     }
 
-    public List<Transition> getCurrentTransitions(Workflow workflow)
+    List<Transition> getCurrentTransitions(Workflow workflow)
     {
         State state = getCurrentState( workflow );
 
-        if ( state != null )
-        {
-            return state.getTransitions();
-        }
-        
-        return new ArrayList<Transition>();
+        return state.getTransitions();
     }
 
     public List<Transition> getAvailableCurrentTransitions(Workflow workflow)
@@ -450,13 +368,10 @@ public class DefaultWorkflowEngine implements WorkflowEngine
         {
             Transition transition = transIter.next();
 
-            if ( transition.getPredicate() != null ) 
+            if ( ! transition.getPredicate().evaluate( workflow,
+                                                       null ) )
             {
-                if ( ! transition.getPredicate().evaluate( workflow,
-                                                           null ) )
-                {
-                    transIter.remove();
-                }
+                transIter.remove();
             }
         }
 
@@ -466,6 +381,14 @@ public class DefaultWorkflowEngine implements WorkflowEngine
     public List<StateModel> getStateSequence(Workflow workflow)
     {
         return getStateModelDao().getStateSequence( workflow.getModel() );
+    }
+
+    public void afterPropertiesSet() throws Exception
+    {
+        if ( this.processLoader != null )
+        {
+            this.processLoader.loadProcesses( this );
+        }
     }
 }
 

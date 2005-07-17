@@ -1,15 +1,13 @@
 package flox.model;
 
-import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Expression;
+import net.sf.hibernate.Criteria;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.util.PropertiesHelper;
+import net.sf.hibernate.expression.Expression;
+import net.sf.hibernate.expression.Criterion;
 
-import flox.def.Process;
-import flox.def.State;
-
-import java.util.Iterator;
 import java.util.List;
+import java.io.Serializable;
 
 /**
  * Created by IntelliJ IDEA.
@@ -19,7 +17,7 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class WorkflowModelDaoImpl
-        extends DaoBase implements WorkflowModelDao, PageableDao
+        extends DaoBase implements WorkflowModelDao
 {
     public WorkflowModelDaoImpl()
     {
@@ -37,7 +35,7 @@ public class WorkflowModelDaoImpl
         return (WorkflowModel) get( WorkflowModel.class, id );
     }
     
-    public WorkflowModel get(String processHandle,
+    public WorkflowModel get(String processName,
                              Class flowedObjectClass,
                              Criterion flowedObjectCriterion)
             throws NoSuchModelObjectException
@@ -60,8 +58,8 @@ public class WorkflowModelDaoImpl
             Object flowedObject = matchingFlowedObjects.get( 0 );
 
             return (WorkflowModel) get(WorkflowModel.class,
-                                       Expression.and( Expression.eq( "processHandle",
-                                                                      processHandle ),
+                                       Expression.and( Expression.eq( "processName",
+                                                                      processName ),
                                                        Expression.eq( "flowedObject",
                                                                       flowedObject ) ) );
         }
@@ -71,56 +69,13 @@ public class WorkflowModelDaoImpl
             throw convertHibernateAccessException( e );
         }
     }
-    
-    public WorkflowModel get(Process process, Object flowedObject)  throws NoSuchModelObjectException
-    {
-        String processHandle = process.getProcessHandle().getHandle();
-        
-        try
-        {
-            return (WorkflowModel) get(WorkflowModel.class,
-                                       Expression.and( Expression.eq( "processHandle",
-                                                                      processHandle ),
-                                                       Expression.eq( "flowedObject",
-                                                                      flowedObject ) ) );
-        }
-        catch (HibernateException e)
-        {
-            e.printStackTrace();
-            throw convertHibernateAccessException( e );
-        }
-    }
-    
 
-    public List getAll(Process process, State currentState)
+    public List getAll(String processName)
     {
         Criteria criteria = createCriteria( WorkflowModel.class );
-        
-        String processHandle = process.getProcessHandle().getHandle();
 
-        criteria.add( Expression.eq( "processHandle", processHandle ) );
-        
-        criteria.createCriteria( "currentState" )
-            .add( Expression.eq( "name", currentState.getName() ) );
-        
-        try
-        {
-            return criteria.list();
-        }
-        catch (HibernateException e)
-        {
-            throw convertHibernateAccessException( e );
-        }
-    }
-
-    public List getAll(Process process)
-    {
-        Criteria criteria = createCriteria( WorkflowModel.class );
-        
-        String processHandle = process.getProcessHandle().getHandle();
-
-        criteria.add( Expression.eq( "processHandle",
-                                     processHandle ) );
+        criteria.add( Expression.eq( "processName",
+                                     processName ) );
 
         try
         {
@@ -130,39 +85,5 @@ public class WorkflowModelDaoImpl
         {
             throw convertHibernateAccessException( e );
         }
-    }
-
-    public Iterator getCurrentPageRows( int first, int pageSize, String sortColumn, boolean sortOrder, Criteria criteria )
-    {
-        return getCurrentPageRows( WorkflowModel.class, first, pageSize, sortColumn, sortOrder, criteria );
-    }
-    
-    public int countAll(Criteria criteria)
-    {
-        return countAll( WorkflowModel.class, criteria );
-    }
-    
-    public Criteria getCriteria( String processHandle)
-    {
-        Criteria criteria = createCriteria( WorkflowModel.class );
-        
-        criteria.add( Expression.eq( "processHandle", processHandle ) );
-        
-        return criteria;
-    }
-    
-    public Criteria getCriteria( String processHandle, String currentState )
-    {
-        Criteria criteria = getCriteria( processHandle );
-        
-        if ( currentState == null )
-        {
-            return criteria;
-        }
-        
-        criteria.createCriteria( "currentState" )
-            .add( Expression.eq( "name", currentState ) );
-        
-        return criteria;
     }
 }

@@ -1,6 +1,7 @@
 package flox.io;
 
 import junit.framework.Test;
+import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import java.net.URL;

@@ -1,13 +1,18 @@
 package flox;
 
 import junit.framework.Test;
+import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import flox.io.ProcessReader;
+import flox.def.*;
+import flox.def.Process;
 import flox.model.StateModel;
 
+import java.net.URL;
 import java.util.List;
 
 public class WorkflowEngineTest 
-        extends FloxTestCase 
+        extends FloxTestCase
 {
     private WorkflowEngine engine;
 
@@ -19,7 +24,7 @@ public class WorkflowEngineTest
     public void setUp() throws Exception
     {
         super.setUp();
-        this.engine = (WorkflowEngine) getBean( "workflowEngine" );
+        this.engine = (WorkflowEngine) getBean( "test.workflowEngine" );
     }
 
     public void tearDown() throws Exception
@@ -102,7 +107,20 @@ public class WorkflowEngineTest
 
     protected Workflow newWorkflow(String name) throws Exception
     {
-        return this.engine.newWorkflow( this, name );
+        addProcess( name + ".xml" );
+
+        return this.engine.newWorkflow( name );
+    }
+
+    protected void addProcess(String name) throws Exception
+    {
+        URL url = getClass().getResource( name );
+
+        ProcessReader reader = (ProcessReader) getBean( "test.processReader" );
+
+        Process process = reader.read( url );
+
+        this.engine.addProcess( process );
     }
 }
 

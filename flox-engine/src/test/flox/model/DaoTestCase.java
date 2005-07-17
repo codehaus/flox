@@ -1,6 +1,13 @@
 package flox.model;
 
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 import flox.FloxTestCase;
+import net.sf.hibernate.SessionFactory;
+import net.sf.hibernate.Session;
+import net.sf.hibernate.Criteria;
+import org.springframework.orm.hibernate.SessionFactoryUtils;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
@@ -34,5 +41,9 @@ public abstract class DaoTestCase
         super.tearDown();
     }
 
+    public static Test suite()
+    {
+        return new TestSuite(DaoTestCase.class);
+    }
 }
 

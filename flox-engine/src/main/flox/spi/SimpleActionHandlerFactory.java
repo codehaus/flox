@@ -37,16 +37,6 @@ public class SimpleActionHandlerFactory
         return uri;
     }
     
-    public void setHandlers(Map handlers)
-    {
-        this.handlers = handlers;
-    }
-    
-    public Map getHandlers()
-    {
-        return this.handlers;
-    }
-    
     public void register(String name,
                          SimpleActionHandler handler)
     {

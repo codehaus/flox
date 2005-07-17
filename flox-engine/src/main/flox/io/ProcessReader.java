@@ -1,6 +1,5 @@
 package flox.io;
 
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.SAXParser;
@@ -8,9 +7,8 @@ import javax.xml.parsers.SAXParserFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.net.URL;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
-import java.io.StringReader;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,63 +75,6 @@ public class ProcessReader
     public void addTriggerDefinitionHandlerFactory(TriggerDefinitionHandlerFactory factory)
     {
         this.triggerDefinitionHandlerFactories.add( factory );
-    }
-    
-    public Process read(String proc) throws ParserConfigurationException, SAXException, IOException
-    {
-        Reader in = new StringReader( proc );
-        try
-        {
-            return read( in );
-        }
-        finally
-        {
-            in.close();
-        }
-    }
-    
-    public Process read(Reader in) throws ParserConfigurationException, SAXException, IOException
-    {
-        SAXParser parser = getSaxParser();
-
-        if ( parser == null )
-        {
-            SAXParserFactory factory = SAXParserFactory.newInstance( );
-
-            factory.setNamespaceAware( true );
-
-            parser = factory.newSAXParser();
-        }
-
-        ProcessReaderHandler handler = new ProcessReaderHandler( this.actionHandlerFactories,
-                                                                 this.triggerDefinitionHandlerFactories );
-
-        parser.parse( new InputSource( in ),
-                      handler );
-
-        return handler.getProcess();
-    }
-    
-    public Process read(InputStream in) throws ParserConfigurationException, SAXException, IOException
-    {
-        SAXParser parser = getSaxParser();
-
-        if ( parser == null )
-        {
-            SAXParserFactory factory = SAXParserFactory.newInstance( );
-
-            factory.setNamespaceAware( true );
-
-            parser = factory.newSAXParser();
-        }
-
-        ProcessReaderHandler handler = new ProcessReaderHandler( this.actionHandlerFactories,
-                                                                 this.triggerDefinitionHandlerFactories );
-
-        parser.parse( in,
-                      handler );
-
-        return handler.getProcess();
     }
 
     public Process read(URL url) throws ParserConfigurationException, SAXException, IOException

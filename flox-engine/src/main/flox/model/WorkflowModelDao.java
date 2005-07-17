@@ -1,10 +1,7 @@
 package flox.model;
 
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Criterion;
-
-import flox.def.Process;
-import flox.def.State;
+import net.sf.hibernate.Criteria;
+import net.sf.hibernate.expression.Criterion;
 
 import java.util.List;
 
@@ -15,7 +12,7 @@ import java.util.List;
  * Time: 1:03:27 PM
  * To change this template use File | Settings | File Templates.
  */
-public interface WorkflowModelDao extends PageableDao
+public interface WorkflowModelDao
 {
     void save(WorkflowModel model);
 
@@ -27,15 +24,5 @@ public interface WorkflowModelDao extends PageableDao
                       Criterion flowedObjectCriterion)
             throws NoSuchModelObjectException;
 
-    WorkflowModel get(Process process, Object flowedObject) 
-        throws NoSuchModelObjectException;
-    
-    //List getAll(String processName, State currentState);
-    //List getAll(String processName);
-    
-    List<WorkflowModel> getAll(Process process);
-    List<WorkflowModel> getAll(Process process, State state);
-    
-    Criteria getCriteria(String processHandle);
-    Criteria getCriteria(String processHandle, String state);
+    List getAll(String processName);
 }

@@ -10,8 +10,6 @@ package flox;
 public class RuntimeFloxException
         extends RuntimeException
 {
-    private static final long serialVersionUID = 3978143249032886324L;
-
     public RuntimeFloxException()
     {
 

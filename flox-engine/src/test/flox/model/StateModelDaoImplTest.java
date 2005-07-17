@@ -1,9 +1,11 @@
 package flox.model;
 
-import java.util.Date;
-
 import junit.framework.Test;
+import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import flox.FloxTestCase;
+
+import java.util.Date;
 
 public class StateModelDaoImplTest 
         extends DaoTestCase
@@ -37,7 +39,7 @@ public class StateModelDaoImplTest
     public void testSave() throws Exception
     {
         WorkflowModel workflow = new WorkflowModel();
-        workflow.setProcessHandle( "test process" );
+        workflow.setProcessName( "test process" );
 
         StateModel state = new StateModel();
 
@@ -65,15 +67,15 @@ public class StateModelDaoImplTest
                       fetchedState.getWorkflow().getId() );
 
         assertEquals( "same process",
-                      state.getWorkflow().getProcessHandle(),
-                      fetchedState.getWorkflow().getProcessHandle() );
+                      state.getWorkflow().getProcessName(),
+                      fetchedState.getWorkflow().getProcessName() );
     }
 
     public void testGetCurrentState() throws Exception
     {
 
         WorkflowModel workflow = new WorkflowModel();
-        workflow.setProcessHandle( "test process" );
+        workflow.setProcessName( "test process" );
 
         StateModel state = new StateModel();
 

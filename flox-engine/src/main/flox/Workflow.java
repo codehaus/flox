@@ -1,12 +1,11 @@
 package flox;
 
-import java.io.Serializable;
-import java.util.List;
-
+import flox.model.WorkflowModel;
 import flox.def.Process;
 import flox.def.State;
 import flox.def.Transition;
-import flox.model.WorkflowModel;
+
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -15,15 +14,13 @@ import flox.model.WorkflowModel;
  * Time: 11:32:28 PM
  * To change this template use File | Settings | File Templates.
  */
-public class Workflow implements Serializable
+public class Workflow
 {
-    private static final long serialVersionUID = 3256719589432963378L;
-    
-    private transient WorkflowEngine engine;
+    private DefaultWorkflowEngine engine;
     private Process process;
     private WorkflowModel model;
 
-    public Workflow(WorkflowEngine engine,
+    public Workflow(DefaultWorkflowEngine engine,
                     Process process,
                     WorkflowModel model)
     {
@@ -32,7 +29,7 @@ public class Workflow implements Serializable
         this.model   = model;
     }
 
-    public WorkflowEngine getEngine()
+    public DefaultWorkflowEngine getEngine()
     {
         return engine;
     }
@@ -45,11 +42,6 @@ public class Workflow implements Serializable
     WorkflowModel getModel()
     {
         return model;
-    }
-    
-    public Long getId()
-    {
-        return getModel().getId();
     }
 
     public State getCurrentState()
