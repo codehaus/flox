@@ -91,7 +91,7 @@ public class WorkflowImageService extends AbstractService
             
             JpegWriter jpegWriter = new JpegWriter();
             jpegWriter.setProcess( process );
-            jpegWriter.setSize( 300, 600 );
+            jpegWriter.setSize( 200, 400 );
             
             output.setContentType( "image/jpeg" );
 
