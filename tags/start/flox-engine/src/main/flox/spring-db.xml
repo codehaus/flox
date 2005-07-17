@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+        "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+    <bean id="xirclesDS" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName">
+            <value>org.postgresql.Driver</value>
+        </property>
+        <property name="url">
+            <value>jdbc:postgresql://localhost:5432/flox</value>
+        </property>
+        <property name="username">
+            <value>postgres</value>
+        </property>
+        <property name="password">
+            <value></value>
+        </property>
+        <property name="validationQuery">
+            <value>SELECT NOW()</value>
+        </property>
+    </bean>
+
+
+    <bean id="sessionFactory"
+        class="org.springframework.orm.hibernate.LocalSessionFactoryBean" singleton="true">
+        <property name="schemaUpdate">
+            <value>true</value>
+        </property>
+        <property name="mappingResources">
+            <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+                <property name="targetClass">
+                    <value>flox.util.HibernateUtil</value>
+                </property>
+                <property name="targetMethod">
+                    <value>getMappings</value>
+                </property>
+            </bean>
+
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">net.sf.hibernate.dialect.PostgreSQLDialect</prop>
+                <prop key="hibernate.show_sql">true</prop>
+            </props>
+        </property>
+        <property name="dataSource">
+            <ref bean="xirclesDS"/>
+        </property>
+    </bean>
+
+
+    <bean id="transactionManager"
+        class="org.springframework.orm.hibernate.HibernateTransactionManager">
+        <property name="sessionFactory">
+            <ref local="sessionFactory"/>
+        </property>
+    </bean>
+
+</beans>

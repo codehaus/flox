@@ -1,0 +1,8 @@
+target
+velocity.log
+test-output
+.classpath
+.project
+.iml
+.ipr
+.iws
