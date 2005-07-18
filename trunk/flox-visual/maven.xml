@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<project
+  xmlns:j="jelly:core"
+  xmlns:ant="jelly:ant"
+  xmlns:doc="doc">
+  
+  <goal name="ci:build">
+      <attainGoal name="jar:install-snapshot"/>
+  </goal>
+  
+</project>
