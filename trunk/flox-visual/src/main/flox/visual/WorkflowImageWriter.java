@@ -96,36 +96,7 @@ public class WorkflowImageWriter
     
     protected BufferedImage getImage() 
     {
-        List<State> states = process.getStates();
-
-        Graph graph = new DirectedSparseGraph();
-
-        Map<State, Vertex> vertexIndex = new HashMap<State, Vertex>();
-
-        for ( State state : states )
-        {
-            SimpleDirectedSparseVertex vertex = new SimpleDirectedSparseVertex();
-            
-            vertex.setUserDatum( FloxLayout.STATE, state, new UserDataContainer.CopyAction.Shared() );
-            graph.addVertex( vertex );
-            vertexIndex.put( state, vertex );
-        }
-
-        for ( State state : states )
-        {
-            Vertex vertex = vertexIndex.get( state );
-
-            for ( Transition transition : state.getTransitions() )
-            {
-                State destState = transition.getDestination();
-                Vertex destVertex = vertexIndex.get( destState );
-
-                DirectedSparseEdge edge = new DirectedSparseEdge( vertex, destVertex );
-                graph.addEdge( edge );
-            }
-        }
-        
-        graph.setUserDatum( FloxLayout.PROCESS, process, new UserDataContainer.CopyAction.Shared() );
+        Graph graph = GraphBuilder.buildGraph( getProcess() );
         
         // --
         

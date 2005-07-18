@@ -98,7 +98,7 @@ public class VertexFunctions extends AbstractFunctions
         return new RoundRectangle2D.Double( 0-(dim.width/2), 0-(dim.height/2), dim.width, dim.height, 10, 10 );
     }
     
-    protected Dimension getShapeDimension(Vertex vertex)
+    public Dimension getShapeDimension(Vertex vertex)
     {
         String label = getLabel( vertex );
         
