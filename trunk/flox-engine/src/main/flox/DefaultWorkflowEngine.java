@@ -369,16 +369,27 @@ public class DefaultWorkflowEngine implements WorkflowEngine
         
         return new Workflow( this, process, wfModel );
     }
-
+    public List<Workflow> getWorkflows(ProcessHandle processHandle)
+        throws ProcessSourceException, NoSuchProcessException
+    {
+        Process process = getProcess( processHandle );
+        
+        return getWorkflows( process );
+    }
     public List<Workflow> getWorkflows(Object context, String processName) 
         throws ProcessSourceException, NoSuchProcessException
     {
         Process process = getProcess( context, processName );
+        
+        return getWorkflows( process );
+    }
 
+    public List<Workflow> getWorkflows(Process process)
+    {
         List<WorkflowModel> models = getWorkflowModelDao().getAll( process );
-        
+    
         List<Workflow> flows = new ArrayList<Workflow>( models.size() );
-        
+    
         for ( WorkflowModel model : models )
         {
             Workflow flow = new Workflow( this, process, model );
@@ -388,11 +399,25 @@ public class DefaultWorkflowEngine implements WorkflowEngine
         return flows;
     }
     
+    public List<Workflow> getWorkflows(ProcessHandle processHandle, String currentStateName) 
+        throws ProcessSourceException, NoSuchProcessException, NoSuchStateException
+    {
+        Process process = getProcess( processHandle, currentStateName );
+        
+        return getWorkflows( process, currentStateName );
+    }
+        
     public List<Workflow> getWorkflows(Object context, String processName, String currentStateName) 
         throws ProcessSourceException, NoSuchProcessException, NoSuchStateException
     {
         Process process = getProcess( context, processName );
         
+        return getWorkflows( process, currentStateName );
+    }
+    
+    public List<Workflow> getWorkflows(Process process, String currentStateName)
+        throws NoSuchStateException
+    {
         State currentState = process.getState( currentStateName );
         
         List<WorkflowModel> models = getWorkflowModelDao().getAll( process, currentState );
