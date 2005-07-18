@@ -23,12 +23,15 @@ import org.apache.tapestry.link.ILinkRenderer;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.Vertex;
 import edu.uci.ics.jung.visualization.Coordinates;
+import flox.WorkflowEngine;
+import flox.def.NoSuchStateException;
 import flox.def.Process;
 import flox.def.State;
 import flox.visual.GraphBuilder;
 import flox.visual.jung.FloxLayout;
 import flox.visual.jung.FloxLayoutSolver;
 import flox.visual.jung.VertexFunctions;
+import flox.web.tapestry.WorkflowEngineProvider;
 
 
 public abstract class WorkflowImageMap extends WorkflowImage implements IDirect
@@ -86,6 +89,8 @@ public abstract class WorkflowImageMap extends WorkflowImage implements IDirect
         
         writer.attribute( "name", "workflowmap" );
         
+        WorkflowEngine wfEngine = ((WorkflowEngineProvider)getPage()).getWorkflowEngine();
+        
         for ( Vertex vertex : (Set<Vertex>) graph.getVertices() )
         {
             writer.begin( "area" );
@@ -103,9 +108,23 @@ public abstract class WorkflowImageMap extends WorkflowImage implements IDirect
             
             ILink link = actionService.getLink( cycle, this, new Object[] { state.getName() } );
             
+            String toolTip = state.getName();
+                
+            try
+            {
+                int numWorkflows = wfEngine.getWorkflows( getProcess(), state.getName() ).size();
+                
+                toolTip += ": " + numWorkflows;
+            }
+            catch ( NoSuchStateException e )
+            {
+                // ignore
+            }
+            
             writer.attribute( "href", link.getAbsoluteURL() );
             writer.attribute( "alt", state.getName() );
             writer.attribute( "coords", x1+","+y1+","+x2+","+y2 );
+            writer.attribute( "title", toolTip );
             
             writer.end( "area" );
         }

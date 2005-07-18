@@ -34,11 +34,27 @@ public interface WorkflowEngine
     Workflow getWorkflow(Object context, String processName, Object flowedObject) 
         throws ProcessSourceException, NoSuchProcessException, NoSuchModelObjectException;
 
+    List<Workflow> getWorkflows(ProcessHandle processHandle)
+        throws ProcessSourceException, NoSuchProcessException;
+    
     List<Workflow> getWorkflows(Object context, String processName) 
         throws ProcessSourceException, NoSuchProcessException;
+    
+    List<Workflow> getWorkflows(Process process);
 
+    // --
+    
+    List<Workflow> getWorkflows(ProcessHandle processHandle, String currentState)
+        throws ProcessSourceException, NoSuchProcessException, NoSuchStateException;
+    
     List<Workflow> getWorkflows(Object context, String processName, String currentState) 
         throws ProcessSourceException, NoSuchProcessException, NoSuchStateException;
+    
+    List<Workflow> getWorkflows(Process process, String currentState)
+        throws NoSuchStateException;
+    
+    // --
+    
     
     List<Transition> getAvailableCurrentTransitions(Workflow workflow);
 

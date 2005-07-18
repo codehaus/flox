@@ -11,7 +11,7 @@ import flox.def.Process;
 import flox.web.tapestry.WorkflowEngineProvider;
 import flox.web.tapestry.services.WorkflowImageService;
 
-public abstract class WorkflowImage extends AbstractComponent implements WorkflowEngineProvider
+public abstract class WorkflowImage extends AbstractComponent 
 {
     private Process process;
     
