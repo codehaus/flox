@@ -1,11 +1,12 @@
 package flox.web.tapestry;
 
 import flox.NoSuchProcessException;
+import flox.WorkflowEngine;
 import flox.def.Process;
 import flox.spi.ProcessSourceException;
 
 
-public interface ProcessProvider
+public interface WorkflowEngineProvider
 {
-    Process getProcess() throws ProcessSourceException, NoSuchProcessException;
+    WorkflowEngine getWorkflowEngine();
 }
