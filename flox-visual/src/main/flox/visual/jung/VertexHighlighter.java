@@ -38,8 +38,6 @@ public class VertexHighlighter extends AbstractFunctions implements Visualizatio
 
     public void paint( Graphics g )
     {
-        System.err.println( "running highlighter" ) ;
-        
         Graphics2D graphics = (Graphics2D) g;
         
         for ( Vertex vertex : (Set<Vertex>) layout.getGraph().getVertices() )
