@@ -22,4 +22,8 @@
     </ant:xmlvalidate>
   </goal>
     
+  <goal name="ci:build">
+      <attainGoal name="jar:install-snapshot"/>
+  </goal>
+    
 </project>
