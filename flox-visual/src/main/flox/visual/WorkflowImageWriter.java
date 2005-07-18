@@ -56,6 +56,7 @@ public class WorkflowImageWriter
     public static final String PNG = "png";
     public static final String GIF = "gif";
     
+    private String state;
     private String imageType;
     
     private Process process;
@@ -161,7 +162,10 @@ public class WorkflowImageWriter
         
         VertexHighlighter highlighter = new VertexHighlighter( process, layout );
         
-        highlighter.addHighlight( "active", new Color( 0xFF, 0xBB, 0x00 ) );
+        if ( this.state != null )
+        {
+            highlighter.addHighlight( this.state, new Color( 0xFF, 0xBB, 0x00 ) );
+        }
         
         viewer.addPreRenderPaintable( highlighter );
         
@@ -180,5 +184,10 @@ public class WorkflowImageWriter
         viewer.paintComponent( g2 );
         
         return image;
+    }
+
+    public void setState( String state )
+    {
+        this.state = state;
     }
 }

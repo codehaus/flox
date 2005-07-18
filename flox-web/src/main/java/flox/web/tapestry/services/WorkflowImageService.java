@@ -30,10 +30,12 @@ import edu.uci.ics.jung.visualization.Layout;
 import edu.uci.ics.jung.visualization.Renderer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import flox.NoSuchProcessException;
+import flox.WorkflowEngine;
 import flox.def.Process;
+import flox.spi.ProcessHandle;
 import flox.spi.ProcessSourceException;
 import flox.visual.WorkflowImageWriter;
-import flox.web.tapestry.ProcessProvider;
+import flox.web.tapestry.WorkflowEngineProvider;
 
 public class WorkflowImageService extends AbstractService
 {
@@ -46,21 +48,34 @@ public class WorkflowImageService extends AbstractService
         String context[] = getServiceContext( cycle.getRequestContext() );
 
         String pageName = context[0];
-        String componentPath = context[1];
+        
+        Object[] parameters = getParameters( cycle );
+        
+        String processHandleStr = (String) parameters[0];
+        String activeState = null;
+        
+        if ( parameters.length > 1 )
+        {
+            activeState = (String) parameters[1];
+        }
 
         IPage page = cycle.getPage( pageName );
 
         IComponent component = page;
 
-        ProcessProvider provider = ( ProcessProvider ) component;
+        WorkflowEngineProvider provider = ( WorkflowEngineProvider ) component;
+        
+        WorkflowEngine wfEngine = provider.getWorkflowEngine();
 
         try
         {
-            Process process = provider.getProcess();
+            ProcessHandle processHandle = new ProcessHandle( processHandleStr );
+            Process process = wfEngine.getProcess( processHandle );
             
             WorkflowImageWriter imageWriter = new WorkflowImageWriter( WorkflowImageWriter.PNG );
             
             imageWriter.setProcess( process );
+            imageWriter.setState( activeState );
             
             output.setContentType( imageWriter.getMimeType() );
 
@@ -98,7 +113,7 @@ public class WorkflowImageService extends AbstractService
                 component.getPage().getPageName(), component.getIdPath()
         };
 
-        return constructLink( cycle, SERVICE_NAME, context, null, true );
+        return constructLink( cycle, SERVICE_NAME, context, parameters, true );
     }
 }
 
