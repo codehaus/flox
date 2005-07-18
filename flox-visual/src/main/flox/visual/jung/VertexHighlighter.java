@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Paint;
-import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.RoundRectangle2D;
 import java.util.HashMap;
@@ -17,9 +16,6 @@ import edu.uci.ics.jung.visualization.Coordinates;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import flox.def.Process;
 import flox.def.State;
-
-import quicktime.app.image.Paintable;
-import quicktime.app.image.QTImageDrawer;
 
 public class VertexHighlighter extends AbstractFunctions implements VisualizationViewer.Paintable
 {
