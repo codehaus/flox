@@ -37,7 +37,7 @@ public class Workflow implements Serializable
         return engine;
     }
 
-    Process getProcess()
+    public Process getProcess()
     {
         return process;
     }

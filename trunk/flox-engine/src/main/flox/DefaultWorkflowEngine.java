@@ -413,7 +413,7 @@ public class DefaultWorkflowEngine implements WorkflowEngine
     {
         try
         {
-            StateModel model = getStateModelDao().getCurrentState( workflow.getModel() );
+            StateModel model = workflow.getModel().getCurrentState();
 
             State state = workflow.getProcess().getState( model.getName() );
 
@@ -423,10 +423,6 @@ public class DefaultWorkflowEngine implements WorkflowEngine
         {
             throw new WorkflowIntegrityException( workflow,
                                                   e );
-        }
-        catch (NoSuchModelObjectException e)
-        {
-            return null;
         }
     }
 
