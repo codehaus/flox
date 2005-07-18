@@ -42,6 +42,11 @@ public class FloxLayout extends AbstractLayout
         computeSize();
     }
     
+    public VertexFunctions getVertexFunctions()
+    {
+        return this.vertexFunctions;
+    }
+    
     public int getColumnWidth()
     {
         return columnWidth;
@@ -104,7 +109,7 @@ public class FloxLayout extends AbstractLayout
         double y = ( row * ( rowHeightPx * ROW_HEIGHT_MULTIPLIER ) );
         
         x = x + ( widthPx / 2 ) - ( ( rowWidth - 1 ) * ( columnWidthPx / 2 ) );
-        y = y + ( rowHeightPx/2 );
+        y = y + ( rowHeightPx/2 ) + 3;
         
         State state = (State) vertex.getUserDatum( STATE );
         

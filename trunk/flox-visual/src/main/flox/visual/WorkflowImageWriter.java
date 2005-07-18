@@ -36,6 +36,7 @@ import edu.uci.ics.jung.visualization.Layout;
 import edu.uci.ics.jung.visualization.PluggableRenderer;
 import edu.uci.ics.jung.visualization.Renderer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.VisualizationViewer.Paintable;
 import edu.uci.ics.jung.visualization.contrib.CircleLayout;
 import flox.def.Process;
 import flox.def.State;
@@ -45,6 +46,7 @@ import flox.visual.jung.FloxLayout;
 import flox.visual.jung.FloxLayoutSolver;
 import flox.visual.jung.FloxVisualizationViewer;
 import flox.visual.jung.VertexFunctions;
+import flox.visual.jung.VertexHighlighter;
 import flox.visual.jung.VertexLabelPaintFunction;
 
 
@@ -156,6 +158,12 @@ public class WorkflowImageWriter
         renderer.setEdgeShapeFunction( new EdgeShape.Line() );
         
         FloxVisualizationViewer viewer = new FloxVisualizationViewer( layout, renderer );
+        
+        VertexHighlighter highlighter = new VertexHighlighter( process, layout );
+        
+        highlighter.addHighlight( "active", new Color( 0xFF, 0xBB, 0x00 ) );
+        
+        viewer.addPreRenderPaintable( highlighter );
         
         viewer.setBackground( Color.white );
         viewer.setForeground( Color.black );
