@@ -16,6 +16,7 @@ public abstract class WorkflowImage extends AbstractComponent implements Workflo
     private Process process;
     
     public abstract String getState();
+    public abstract String getUseMap();
     
     public void setProcess(Process process)
     {
@@ -27,20 +28,21 @@ public abstract class WorkflowImage extends AbstractComponent implements Workflo
         return process;
     }
     
-    public void renderComponent(IMarkupWriter writer, IRequestCycle cycle)
+    protected void renderComponent(IMarkupWriter writer, IRequestCycle cycle)
     {
-        System.err.println( "render: " ) ;
         IEngineService service = getPage().getEngine().getService( WorkflowImageService.SERVICE_NAME);
         
         ILink link = service.getLink( cycle, this, new Object[] { getProcess().getProcessHandle().getHandle(), getState() } );
         
-        System.err.println( "prc: " + getProcess().getProcessHandle().getHandle() );
-        System.err.println( "state: " + getState() );
-        System.err.println( "link: " + link.getAbsoluteURL() );
-        
         writer.begin( "img" );
         
         writer.attribute( "src", link.getAbsoluteURL() );
+        writer.attribute( "border", "0" );
+        
+        if ( getUseMap() != null )
+        {
+            writer.attribute( "usemap", getUseMap() );
+        }
         
         writer.end( "img" );
     }

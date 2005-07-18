@@ -14,5 +14,6 @@
     <component-type type="WorkflowTransitions" specification-path="/flox/web/tapestry/components/WorkflowTransitions.jwc"/>
     
     <component-type type="WorkflowImage" specification-path="/flox/web/tapestry/components/WorkflowImage.jwc"/>
+    <component-type type="WorkflowImageMap" specification-path="/flox/web/tapestry/components/WorkflowImageMap.jwc"/>
     
 </library-specification>
