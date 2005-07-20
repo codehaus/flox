@@ -90,13 +90,7 @@ public class FloxLayoutSolver
             ++curRow;
         }
         
-        System.err.println( "initial" );
-        rowList.dump();
-        
         rowList.optimize();
-        
-        System.err.println( "optimized" );
-        rowList.dump();
     }
     
     public RowList getRowList()
