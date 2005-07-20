@@ -82,6 +82,11 @@ public class RowList
     {
         int row = getRow( vertex );
         
+        if ( row < 0 ) 
+        {
+            return -1;
+        }
+        
         List<Vertex> rowVertices = get( row ).getVertices();
         
         int numCols = rowVertices.size();
