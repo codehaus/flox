@@ -97,6 +97,8 @@ public class DefaultWorkflowEngine implements WorkflowEngine
     public Process getProcess(Object context, String name)
         throws ProcessSourceException, NoSuchProcessException
     {
+        System.err.println( "context: " + context );
+        System.err.println( "name: " + name );
         Process process = getProcessSource().getProcess( context, name );
 
         if ( process == null )

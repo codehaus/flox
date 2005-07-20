@@ -54,6 +54,8 @@ public class FloxLayoutSolver
         
         State state = process.getStartState();
         
+        System.err.println( "start state: " + state.getName() );
+        
         Vertex vertex = stateToVertex.get( state );
             
         rowList.add( 0, vertex );
@@ -88,7 +90,13 @@ public class FloxLayoutSolver
             ++curRow;
         }
         
+        System.err.println( "initial" );
+        rowList.dump();
+        
         rowList.optimize();
+        
+        System.err.println( "optimized" );
+        rowList.dump();
     }
     
     public RowList getRowList()

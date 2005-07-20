@@ -15,8 +15,7 @@ public class NoSuchProcessException
     private WorkflowEngine engine;
     private String name;
 
-    public NoSuchProcessException(WorkflowEngine engine,
-                                  String name)
+    public NoSuchProcessException(WorkflowEngine engine, String name)
     {
         this.engine = engine;
         this.name   = name;
