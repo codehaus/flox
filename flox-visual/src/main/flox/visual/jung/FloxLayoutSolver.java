@@ -54,8 +54,6 @@ public class FloxLayoutSolver
         
         State state = process.getStartState();
         
-        System.err.println( "start state: " + state.getName() );
-        
         Vertex vertex = stateToVertex.get( state );
             
         rowList.add( 0, vertex );
