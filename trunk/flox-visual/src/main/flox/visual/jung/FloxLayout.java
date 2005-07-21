@@ -93,20 +93,7 @@ public class FloxLayout extends AbstractLayout
     protected void initialize_local_vertex( Vertex vertex )
     {
         int row = rowList.getRow( vertex );
-        
-        if ( row < 0 )
-        {
-            System.err.println( "no mapping? " + ((State)vertex.getUserDatum( STATE )).getName() );
-            return;
-        }
-        
         int col = rowList.getColumn( vertex );
-        
-        if ( col < 0 )
-        {
-            System.err.println( "no mapping? " + ((State)vertex.getUserDatum( STATE )).getName() );
-            return;
-        }
         
         int widthPx  = this.getCurrentSize().width;
         int heightPx = this.getCurrentSize().height;
@@ -134,25 +121,11 @@ public class FloxLayout extends AbstractLayout
     
     public double getX(Vertex vertex)
     {
-        Coordinates coords = getCoordinates( vertex );
-        
-        if ( coords == null )
-        {
-            System.err.println( "x no coord: " + ((State)vertex.getUserDatum( STATE )).getName() );
-            return 0;
-        }
         return getCoordinates( vertex ).getX();
     }
     
     public double getY(Vertex vertex)
     {
-        Coordinates coords = getCoordinates( vertex );
-        
-        if ( coords == null )
-        {
-            System.err.println( "y no coord: " + ((State)vertex.getUserDatum( STATE )).getName() );
-            return 0;
-        }
         return getCoordinates( vertex ).getY();
     }
     

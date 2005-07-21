@@ -52,8 +52,6 @@ public class GraphBuilder
 
                 DirectedSparseEdge edge = new DirectedSparseEdge( vertex, destVertex );
                 graph.addEdge( edge );
-                
-                System.err.println( "connect: " + state.getName() + " to " + destState.getName() );
             }
         }
         
