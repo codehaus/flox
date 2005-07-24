@@ -93,7 +93,7 @@
         <dependency>
             <groupId>ehcache</groupId>
             <artifactId>ehcache</artifactId>
-            <version>0.9</version>
+            <version>1.1</version>
             <properties>
                 <war.bundle>true</war.bundle>
             </properties>
@@ -125,7 +125,7 @@
         <dependency>
             <groupId>hibernate</groupId>
             <artifactId>hibernate</artifactId>
-            <version>3.0.1</version>
+            <version>3.0.5</version>
             <properties>
                 <war.bundle>true</war.bundle>
             </properties>
